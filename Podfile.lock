@@ -1,0 +1,40 @@
+PODS:
+  - Alamofire (4.6.0)
+  - Crashlytics (3.9.3):
+    - Fabric (~> 1.7.2)
+  - Fabric (1.7.2)
+  - RxCocoa (4.1.1):
+    - RxSwift (~> 4.0)
+  - RxSwift (4.1.1)
+  - SDWebImage (4.2.3):
+    - SDWebImage/Core (= 4.2.3)
+  - SDWebImage/Core (4.2.3)
+  - SwiftyJSON (4.0.0)
+  - TwitterCore (3.1.0)
+  - TwitterKit (3.3.0):
+    - TwitterCore (>= 3.1.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - Crashlytics
+  - Fabric
+  - RxCocoa
+  - RxSwift
+  - SDWebImage
+  - SwiftyJSON
+  - TwitterKit
+
+SPEC CHECKSUMS:
+  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  Crashlytics: dbb07d01876c171c5ccbdf7826410380189e452c
+  Fabric: 9cd6a848efcf1b8b07497e0b6a2e7d336353ba15
+  RxCocoa: fd0862fd2df95fa55562ad28ffd2522c25eb4a85
+  RxSwift: c6e3b1c7b325c7d121cd4327e9d98b7ed746b570
+  SDWebImage: 791bb72962b3492327ddcac4b1880bd1b5458431
+  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+  TwitterCore: 644d59e75abccb26cf0a9050d2c4dea0e5412241
+  TwitterKit: a2e60ddcedbf54091eac6f27685ca7a87681e1d7
+
+PODFILE CHECKSUM: d34ac22fbe85acf334799e5a7b454711fc4535b9
+
+COCOAPODS: 1.4.0
