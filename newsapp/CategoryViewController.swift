@@ -93,7 +93,6 @@ class CategoryViewController: UIViewController, ArticleSelectable, ArticleListPr
 extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//    return viewModel.numberOfArticles()
     if viewModel.numberOfArticles() == 0 {
       return 10
     } else {
@@ -104,17 +103,13 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
     if viewModel.numberOfArticles() == 0 {
-      
       let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewDummyCell") as! ArticlePreviewDummyCell
       return cell
-      
     } else {
-      
       let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewCell", for: indexPath) as! ArticlePreviewCell
       cell.selectionStyle = .none
       cell.configureWith(viewModel.articleForItemAt(indexPath))
       return cell
-      
     }
   }
 

@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
 
 protocol ArticleListViewModelType {
   
@@ -24,4 +26,9 @@ protocol ArticleListViewModelType {
   func moveToFirstPage()
   
   func markAsReadArticleWithID(_ ID: Int)
+}
+
+protocol NewArticleListViewModelType {
+  var articlesDriver: Driver<[ArticlePreview]> { get }
+  func moveToNextPageIfNeeded()
 }

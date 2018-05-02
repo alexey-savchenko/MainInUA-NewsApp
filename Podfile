@@ -15,6 +15,8 @@ target 'newsapp' do
   
   pod 'RxSwift'
   pod 'RxCocoa'
+
+  pod 'SnapKit'
   
   target 'newsappTests' do
     inherit! :search_paths
