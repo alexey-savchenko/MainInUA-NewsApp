@@ -31,11 +31,10 @@ class ContentBuilder: NewsContentBuider {
                                       let totalPagesHeader = dataResponse.response?.allHeaderFields["x-wp-totalpages"] as? String,
                                       let totalPages = Int(totalPagesHeader) {
                                       
-                                      let news = jsonArray.flatMap { ArticlePreview(json: $0) }
+                                      let news = jsonArray.compactMap(ArticlePreview.init)
                                       let package = NewsPackage(news: news, totalAvailablePages: totalPages)
                                       
                                       return Result.success(package)
-                                      
                                     } else {
                                       return Result.failure("Corrupted data")
                                     }

@@ -24,20 +24,17 @@ struct YearEvent: YearEventType {
 }
 
 extension YearEvent {
-  
   init?(json: JSON) {
     
-    name = json["region_name"].string!
-    ID = json["region_id"].int!
-    imageURLString = json["region_image"].string!
-    logoURLString = json["region_logo"].string!
+    name = json["region_name"].stringValue
+    ID = json["region_id"].intValue
+    imageURLString = json["region_image"].stringValue
+    logoURLString = json["region_logo"].stringValue
     
     if let jsonMedia = json["content"].array {
-      self.media = jsonMedia.flatMap { MediaFactory.makeMediaFromJSON($0) }
+      self.media = jsonMedia.compactMap(MediaFactory.makeMediaFromJSON)
     } else {
       return nil
     }
-    
   }
-  
 }
