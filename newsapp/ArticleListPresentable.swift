@@ -14,5 +14,5 @@ protocol ArticleListPresentable {
   init(viewModel: ArticleListViewModelType)
   
   var viewModel: ArticleListViewModelType { get set }
-  var feedTV: UITableView! { get set }
+  var feedTableView: UITableView! { get set }
 }

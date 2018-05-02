@@ -21,7 +21,7 @@ class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
   
   var viewModel: ArticleListViewModelType
   
-  var feedTV: UITableView!
+  var feedTableView: UITableView!
   
   let categories: [NewsCategory] = [NewsCategory(name: "В Україні", rawName: "in-ukraine"),
                                     NewsCategory(name: "Економіка", rawName: "ekonomika"),
@@ -49,14 +49,10 @@ class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
       self.menuLeadingConstraint.constant = -300
       self.hamburgerItem.image = UIImage(named: "hamburgerImage")
       UIView.animate(withDuration: 0.3, animations: {
-        
         self.menuTableView.layoutIfNeeded()
         self.blackView.alpha = 0
-        
       }, completion: { (_) in
-        
         self.animationInProgress = false
-        
       })
       
       menuIsShown = false
@@ -77,9 +73,7 @@ class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
         self.animationInProgress = false
         
       })
-      
       menuIsShown = true
-      
     }
   }
   
@@ -139,14 +133,14 @@ class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
     blackView.alpha = 0
     blackView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(blackViewTap)))
     
-    feedTV = UITableView()
-    feedTV.dataSource = self
-    feedTV.translatesAutoresizingMaskIntoConstraints = false
-    feedTV.delegate = self
-    feedTV.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    feedTV.tableFooterView = UIView(frame: .zero)
+    feedTableView = UITableView()
+    feedTableView.dataSource = self
+    feedTableView.translatesAutoresizingMaskIntoConstraints = false
+    feedTableView.delegate = self
+    feedTableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    feedTableView.tableFooterView = UIView(frame: .zero)
     
-    view.addSubview(feedTV)
+    view.addSubview(feedTableView)
     
     menuTableView = UITableView()
     menuTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -161,10 +155,10 @@ class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
     
     setupConstraints()
     
-    feedTV.refreshControl = _refreshControl
-    feedTV.register(UINib(nibName: "ArticlePreviewDummyCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewDummyCell")
-    feedTV.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
-    feedTV.register(UINib(nibName: "YearEventsCell", bundle: nil), forCellReuseIdentifier: "YearEventsCell")
+    feedTableView.refreshControl = _refreshControl
+    feedTableView.register(UINib(nibName: "ArticlePreviewDummyCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewDummyCell")
+    feedTableView.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
+    feedTableView.register(UINib(nibName: "YearEventsCell", bundle: nil), forCellReuseIdentifier: "YearEventsCell")
     
     self.navigationItem.titleView = {
       let image : UIImage = UIImage(named: "logoSmall.png")!
@@ -175,7 +169,7 @@ class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
     }()
     
     viewModel.didLoadNews = { [unowned self] in
-      self.feedTV.reloadData()
+      self.feedTableView.reloadData()
       self._refreshControl.endRefreshing()
     }
     
@@ -193,10 +187,10 @@ class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
     if #available(iOS 11.0, *) {
       let safeArea = view.safeAreaLayoutGuide
       
-      feedTV.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 0).isActive = true
-      feedTV.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
-      feedTV.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
-      feedTV.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
+      feedTableView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 0).isActive = true
+      feedTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
+      feedTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
+      feedTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
       
       menuTableView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 0).isActive = true
       menuTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
@@ -214,10 +208,10 @@ class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
     } else {
       // Fallback on earlier versions
       automaticallyAdjustsScrollViewInsets = false
-      feedTV.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
-      feedTV.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor).isActive = true
-      feedTV.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-      feedTV.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+      feedTableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
+      feedTableView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor).isActive = true
+      feedTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+      feedTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
       
       menuTableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 0).isActive = true
       menuTableView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor).isActive = true
@@ -264,7 +258,7 @@ extension FeedVC: UITableViewDataSource, UITableViewDelegate {
   
   func numberOfSections(in tableView: UITableView) -> Int {
     
-    if tableView == feedTV {
+    if tableView == feedTableView {
       return 2
     } else {
       return 1
@@ -273,7 +267,7 @@ extension FeedVC: UITableViewDataSource, UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    if tableView == feedTV {
+    if tableView == feedTableView {
       if section == 0 {
         //Extra section for Year event
         return 1
@@ -290,7 +284,7 @@ extension FeedVC: UITableViewDataSource, UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    if tableView == feedTV {
+    if tableView == feedTableView {
       if indexPath.section == 0 {
         return 200
       } else {
@@ -303,7 +297,7 @@ extension FeedVC: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
-    if tableView == feedTV {
+    if tableView == feedTableView {
       
       if indexPath.section == 0 {
         
@@ -357,7 +351,7 @@ extension FeedVC: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
     
-    if tableView == feedTV {
+    if tableView == feedTableView {
       
       guard indexPath.section == 1 else { return }
       
@@ -378,7 +372,7 @@ extension FeedVC: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-    if tableView == feedTV {
+    if tableView == feedTableView {
       
       if indexPath.section == 0 {
         //Year event

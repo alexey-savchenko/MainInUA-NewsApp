@@ -23,7 +23,7 @@ class CategoryViewController: UIViewController, ArticleSelectable, ArticleListPr
 
   var category: NewsCategory!
 
-  var feedTV: UITableView!
+  var feedTableView: UITableView!
 
   lazy var _refreshControl: UIRefreshControl = {
     let refreshControl = UIRefreshControl()
@@ -46,18 +46,18 @@ class CategoryViewController: UIViewController, ArticleSelectable, ArticleListPr
     navigationItem.rightBarButtonItems = [UIBarButtonItem.init(customView: activityIndicator)]
     navigationItem.title = category.name
 
-    feedTV = UITableView()
-    feedTV.frame = view.frame
-    feedTV.dataSource = self
-    feedTV.delegate = self
-    view.addSubview(feedTV)
+    feedTableView = UITableView()
+    feedTableView.frame = view.frame
+    feedTableView.dataSource = self
+    feedTableView.delegate = self
+    view.addSubview(feedTableView)
     
-    feedTV.rowHeight = 90
-    feedTV.register(UINib(nibName: "ArticlePreviewDummyCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewDummyCell")
-    feedTV.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
+    feedTableView.rowHeight = 90
+    feedTableView.register(UINib(nibName: "ArticlePreviewDummyCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewDummyCell")
+    feedTableView.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
 
     viewModel.didLoadNews = { [unowned self] in
-      self.feedTV.reloadData()
+      self.feedTableView.reloadData()
       self._refreshControl.endRefreshing()
     }
     
@@ -116,11 +116,6 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
       return cell
       
     }
-    
-//    let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewCell", for: indexPath) as! ArticlePreviewCell
-//    cell.configureWith(viewModel.articleForItemAt(indexPath))
-//    return cell
-
   }
 
   func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

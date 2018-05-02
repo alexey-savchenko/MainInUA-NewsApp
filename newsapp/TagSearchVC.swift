@@ -36,7 +36,7 @@ class TagSearchVC: UIViewController, ArticleSelectable, ArticleListPresentable {
 //  var customBackButton: [UIBarButtonItem]!
 //  var activityIndicator: UIActivityIndicatorView!
 
-  var feedTV: UITableView!
+  var feedTableView: UITableView!
 //
 //  @objc func backPressed(){
 //    navigationController?.popViewController(animated: true)
@@ -55,19 +55,19 @@ class TagSearchVC: UIViewController, ArticleSelectable, ArticleListPresentable {
 //    customBackButton = CustomBackButton.createWithText(text: "", color: .black, target: self, action: #selector(backPressed))
 //    navigationItem.leftBarButtonItems = customBackButton
 
-    feedTV = UITableView()
-    feedTV.delegate = self
-    feedTV.dataSource = self
-    feedTV.translatesAutoresizingMaskIntoConstraints = false
-    feedTV.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
-    feedTV.tableFooterView = UIView(frame: .zero)
-    feedTV.rowHeight = 90
-    view.addSubview(feedTV)
+    feedTableView = UITableView()
+    feedTableView.delegate = self
+    feedTableView.dataSource = self
+    feedTableView.translatesAutoresizingMaskIntoConstraints = false
+    feedTableView.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
+    feedTableView.tableFooterView = UIView(frame: .zero)
+    feedTableView.rowHeight = 90
+    view.addSubview(feedTableView)
 
     setupConstraints()
 
     viewModel.didLoadNews = { [unowned self] in
-      self.feedTV.reloadData()
+      self.feedTableView.reloadData()
     }
     
     viewModel.didFailLoading = { [unowned self] message in
@@ -75,31 +75,6 @@ class TagSearchVC: UIViewController, ArticleSelectable, ArticleListPresentable {
     }
     
     viewModel.loadArticles()
-    
-    
-//    activityIndicator.startAnimating()
-//    Networking.searchNewsWithTag(targetTag!, page: 1) { (status, articles, totalPageCount) in
-//
-//      switch status {
-//      case .success:
-//
-//        self.articleArray = articles!
-//        self.currentPage = 1
-//        self.totalPages = totalPageCount!
-//        self.activityIndicator.stopAnimating()
-//        self.loadingInProgress = false
-//        self.feedTV.reloadData()
-//
-//      case .fail(let errorMessage):
-//
-//        self.loadingInProgress = false
-//        self.present(UIAlertController.createWith(type: AlertType.error, message: errorMessage), animated: true, completion: nil)
-//        self.activityIndicator.stopAnimating()
-//
-//      }
-//
-//    }
-
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -123,16 +98,16 @@ class TagSearchVC: UIViewController, ArticleSelectable, ArticleListPresentable {
     if #available(iOS 11.0, *) {
       let safeArea = view.safeAreaLayoutGuide
       
-      NSLayoutConstraint.activate([feedTV.topAnchor.constraint(equalTo: safeArea.topAnchor),
-                                   feedTV.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-                                   feedTV.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-                                   feedTV.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)])
+      NSLayoutConstraint.activate([feedTableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+                                   feedTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+                                   feedTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+                                   feedTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)])
       
     } else {
-      NSLayoutConstraint.activate([feedTV.topAnchor.constraint(equalTo: topLayoutGuide.topAnchor),
-                                   feedTV.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor),
-                                   feedTV.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                                   feedTV.trailingAnchor.constraint(equalTo: view.trailingAnchor)])
+      NSLayoutConstraint.activate([feedTableView.topAnchor.constraint(equalTo: topLayoutGuide.topAnchor),
+                                   feedTableView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor),
+                                   feedTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                                   feedTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)])
       
     }
 
@@ -174,36 +149,5 @@ extension TagSearchVC: UITableViewDataSource, UITableViewDelegate {
         viewModel.moveToNextPage()
       }
     }
-    
-//    if indexPath.row == articleArray.count - 3 && currentPage < totalPages && !loadingInProgress {
-//
-//      loadingInProgress = true
-//      activityIndicator.startAnimating()
-//
-//      Networking.searchNewsWithTag(targetTag, page: (currentPage + 1)) { (status, articles, totalPageCount) in
-//
-//        switch status {
-//        case .success:
-//
-//          self.articleArray.append(contentsOf: articles!)
-//          self.currentPage += 1
-//          self.totalPages = totalPageCount!
-//          self.activityIndicator.stopAnimating()
-//          self.loadingInProgress = false
-//          self.feedTV.reloadData()
-//
-//        case .fail(let errorMessage):
-//
-//          self.loadingInProgress = false
-//          self.present(UIAlertController.createWith(type: AlertType.error, message: errorMessage), animated: true, completion: nil)
-//          self.activityIndicator.stopAnimating()
-//
-//        }
-//
-//      }
-//
-//    }
-
   }
-
 }

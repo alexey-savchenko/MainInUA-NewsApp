@@ -339,12 +339,6 @@
 				0294E0691F41B54500E9A1DD /* Info.plist */,
 				0294E05A1F41B54500E9A1DD /* AppDelegate.swift */,
 				0294E0931F41C31200E9A1DD /* Networking.swift */,
-				022128B61F41CC9F001F4D28 /* UIImage+Color.swift */,
-				02FD32171F41D36D007A8671 /* Date+timeAgoSinceNow.swift */,
-				02FD32251F41EF0A007A8671 /* UIColor+HEX.swift */,
-				027B037A1F8BA9B7000B63E6 /* Array+Replace.swift */,
-				E6CFC4AC1FEA76E3004ED62B /* Date+String.swift */,
-				E6F0EA741FF2500B009C28E4 /* UserDefaults+ReadIDArray.swift */,
 				E68F8D911FF3A3210013216F /* RFQuiltLayout.h */,
 				E68F8D921FF3A3210013216F /* RFQuiltLayout.m */,
 			);
@@ -425,6 +419,7 @@
 		0294E0591F41B54500E9A1DD /* newsapp */ = {
 			isa = PBXGroup;
 			children = (
+				02EF14C32099F3D3009FFEE9 /* Extensions */,
 				022128B51F41CC87001F4D28 /* Supporting Files */,
 				022128AE1F41C74F001F4D28 /* Models */,
 				0285EB081F72A84600AD40D1 /* Protocols */,
@@ -455,6 +450,19 @@
 				E6730A881FE93F2A00775D09 /* YearEventTest.swift */,
 			);
 			path = newsappUITests;
+			sourceTree = "<group>";
+		};
+		02EF14C32099F3D3009FFEE9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				022128B61F41CC9F001F4D28 /* UIImage+Color.swift */,
+				02FD32171F41D36D007A8671 /* Date+timeAgoSinceNow.swift */,
+				02FD32251F41EF0A007A8671 /* UIColor+HEX.swift */,
+				027B037A1F8BA9B7000B63E6 /* Array+Replace.swift */,
+				E6CFC4AC1FEA76E3004ED62B /* Date+String.swift */,
+				E6F0EA741FF2500B009C28E4 /* UserDefaults+ReadIDArray.swift */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 		030CCAA7B35A32F7FCFFDA40 /* Frameworks */ = {
