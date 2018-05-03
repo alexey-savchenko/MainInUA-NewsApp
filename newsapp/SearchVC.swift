@@ -15,7 +15,7 @@ class SearchVC: UIViewController {
   deinit {
     print("\(self) dealloc")
   }
-  
+
   var feedTV: UITableView!
   var articleArray = [ArticlePreview]()
   var activityIndicator: UIActivityIndicatorView!
@@ -40,8 +40,7 @@ class SearchVC: UIViewController {
     feedTV.tableFooterView = UIView(frame: .zero)
     
     view.addSubview(feedTV)
-    
-    //    self.navigationItem.searchController = searchController
+
     feedTV.tableHeaderView = searchController.searchBar
     view.backgroundColor = .white
 
@@ -50,12 +49,8 @@ class SearchVC: UIViewController {
 
     searchController.hidesNavigationBarDuringPresentation = false
     searchController.searchBar.barTintColor = UIColor(hexString: "EBEBEB")
-    //    navigationItem.hidesSearchBarWhenScrolling = false
     searchController.dimsBackgroundDuringPresentation = false
-    
-    
 
-    
     setupConstraints()
     
     viewModel = SearchNewsViewModel(searchService: NewsSearchService(query: searchController.searchBar.rx.text.orEmpty.asDriver()))
@@ -69,17 +64,20 @@ class SearchVC: UIViewController {
       }
       }.disposed(by: disposeBag)
 
-    viewModel.searchResultsDriver.asObservable().bind(to: feedTV.rx.items(cellIdentifier: "ArticlePreviewCell", cellType: ArticlePreviewCell.self)) { row, article, cell in
-      cell.configureWith(article)
+    viewModel.searchResultsDriver
+      .asObservable()
+      .bind(to: feedTV.rx.items(cellIdentifier: "ArticlePreviewCell", cellType: ArticlePreviewCell.self)) { row, article, cell in
+        cell.configureWith(article)
       }.disposed(by: disposeBag)
     
     feedTV.rx.modelSelected(ArticlePreview.self)
       .subscribe(onNext: { [unowned self] (article) in
-        print("Selected - \(article.title)")
-        self.feedTV.deselectRow(at: self.feedTV.indexPathForSelectedRow!, animated: true)
-        self.searchController.dismiss(animated: true, completion: nil)
-        let vc = ArticleTVC.instantiateWithAricleID(article.id)
-        self.navigationController?.pushViewController(vc, animated: true)
+        // TODO: Fix
+//        print("Selected - \(article.title)")
+//        self.feedTV.deselectRow(at: self.feedTV.indexPathForSelectedRow!, animated: true)
+//        self.searchController.dismiss(animated: true, completion: nil)
+//        let vc = ArticleTVC.instantiateWithAricleID(article.id)
+//        self.navigationController?.pushViewController(vc, animated: true)
       }).disposed(by: disposeBag)
     
   }

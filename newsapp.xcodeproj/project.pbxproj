@@ -44,7 +44,7 @@
 		0294E08C1F41BC4700E9A1DD /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0294E08B1F41BC4700E9A1DD /* Article.swift */; };
 		0294E08E1F41BE3600E9A1DD /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0294E08D1F41BE3600E9A1DD /* FeedVC.swift */; };
 		0294E0941F41C31200E9A1DD /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0294E0931F41C31200E9A1DD /* Networking.swift */; };
-		029899FF1F59681D0052D201 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029899FE1F59681D0052D201 /* CategoryViewController.swift */; };
+		029899FF1F59681D0052D201 /* CategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029899FE1F59681D0052D201 /* CategoryVC.swift */; };
 		02989A011F5968D70052D201 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02989A001F5968D70052D201 /* Category.swift */; };
 		02989A051F5984640052D201 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02989A041F5984640052D201 /* Main.storyboard */; };
 		02B3CB281F7A74A40021894E /* TagSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B3CB271F7A74A40021894E /* TagSearchVC.swift */; };
@@ -208,7 +208,7 @@
 		0294E08B1F41BC4700E9A1DD /* Article.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
 		0294E08D1F41BE3600E9A1DD /* FeedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
 		0294E0931F41C31200E9A1DD /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
-		029899FE1F59681D0052D201 /* CategoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		029899FE1F59681D0052D201 /* CategoryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryVC.swift; sourceTree = "<group>"; };
 		02989A001F5968D70052D201 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		02989A041F5984640052D201 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		029A492A1F58530F000F8FFA /* newsapp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "newsapp-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -328,7 +328,7 @@
 			children = (
 				0294E08D1F41BE3600E9A1DD /* FeedVC.swift */,
 				02FD32151F41D094007A8671 /* ArticleTVC.swift */,
-				029899FE1F59681D0052D201 /* CategoryViewController.swift */,
+				029899FE1F59681D0052D201 /* CategoryVC.swift */,
 				0236CD7A1F79492F00E6E08F /* SearchVC.swift */,
 				02B3CB271F7A74A40021894E /* TagSearchVC.swift */,
 				E6730A781FE81C6A00775D09 /* YearEvents */,
@@ -801,7 +801,9 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-newsapp/Pods-newsapp-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Differentiator/Differentiator.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
@@ -812,7 +814,9 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Differentiator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
@@ -893,7 +897,7 @@
 				E6F0EA751FF2500B009C28E4 /* UserDefaults+ReadIDArray.swift in Sources */,
 				025A96CB1F75579D005D91DE /* ArticleParagraphCell.swift in Sources */,
 				0236CD7D1F7A3B0900E6E08F /* CustomBackButton.swift in Sources */,
-				029899FF1F59681D0052D201 /* CategoryViewController.swift in Sources */,
+				029899FF1F59681D0052D201 /* CategoryVC.swift in Sources */,
 				025A96C71F755598005D91DE /* ArticleTitleCell.swift in Sources */,
 				022128B71F41CC9F001F4D28 /* UIImage+Color.swift in Sources */,
 				022128B31F41C862001F4D28 /* ArticlePreviewDummyCell.swift in Sources */,

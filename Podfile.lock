@@ -2,8 +2,13 @@ PODS:
   - Alamofire (4.7.2)
   - Crashlytics (3.10.1):
     - Fabric (~> 1.7.5)
+  - Differentiator (3.0.2)
   - Fabric (1.7.6)
   - RxCocoa (4.1.2):
+    - RxSwift (~> 4.0)
+  - RxDataSources (3.0.2):
+    - Differentiator (~> 3.0)
+    - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
   - RxSwift (4.1.2)
   - SDWebImage (4.3.3):
@@ -20,6 +25,7 @@ DEPENDENCIES:
   - Crashlytics
   - Fabric
   - RxCocoa
+  - RxDataSources
   - RxSwift
   - SDWebImage
   - SnapKit
@@ -30,8 +36,10 @@ SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - Crashlytics
+    - Differentiator
     - Fabric
     - RxCocoa
+    - RxDataSources
     - RxSwift
     - SDWebImage
     - SnapKit
@@ -42,8 +50,10 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  Differentiator: a87be69eba49ec4ab460c7671143ee3a9eececfd
   Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
+  RxDataSources: cb7c31e652a87ebb919da45f716bbb87b3765f6b
   RxSwift: e49536837d9901277638493ea537394d4b55f570
   SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
@@ -51,6 +61,6 @@ SPEC CHECKSUMS:
   TwitterCore: 644d59e75abccb26cf0a9050d2c4dea0e5412241
   TwitterKit: a2e60ddcedbf54091eac6f27685ca7a87681e1d7
 
-PODFILE CHECKSUM: bd850fe5d6c341ad33893c2c44243cdde5995c57
+PODFILE CHECKSUM: 32ce9d0acbad239cd382467785c86914e670a36b
 
 COCOAPODS: 1.5.0

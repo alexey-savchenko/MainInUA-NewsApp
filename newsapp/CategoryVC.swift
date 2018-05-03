@@ -9,7 +9,9 @@
 import RxSwift
 import UIKit
 
-class CategoryViewController: UIViewController {
+class CategoryVC: UIViewController {
+
+  // MARK: Init and deinit
   init(viewModel: ArticleListViewModelType) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
@@ -22,11 +24,14 @@ class CategoryViewController: UIViewController {
     print("\(self) dealloc")
   }
 
+  // MARK: Properties
   let disposeBag = DisposeBag()
   let viewModel: ArticleListViewModelType
   var category: NewsCategory!
-  let feedTableView = UITableView()
 
+  // MARK: UI
+  let feedTableView = UITableView()
+  var activityIndicator: UIActivityIndicatorView!
   lazy var _refreshControl: UIRefreshControl = {
     let refreshControl = UIRefreshControl()
     refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: UIControlEvents.valueChanged)
@@ -35,13 +40,7 @@ class CategoryViewController: UIViewController {
 
   }()
 
-  @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-    // TODO: Fix
-//    viewModel.moveToFirstPage()
-  }
-
-  var activityIndicator: UIActivityIndicatorView!
-
+  // MARK: Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -49,23 +48,8 @@ class CategoryViewController: UIViewController {
     navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: activityIndicator)]
     navigationItem.title = category.name
 
-    view.addSubview(feedTableView)
-    feedTableView.snp.makeConstraints { (make) in
-      make.edges.equalToSuperview()
-    }
-
-    feedTableView.rowHeight = 90
-    feedTableView.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
-
-    viewModel.articlesDriver
-      .drive(feedTableView.rx.items) { tableView, row, model in
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewCell") as! ArticlePreviewCell
-        cell.configureWith(model)
-        return cell
-      }.disposed(by: disposeBag)
-    
+    setupTableView()
   }
-
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
@@ -74,9 +58,44 @@ class CategoryViewController: UIViewController {
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-
     navigationController?.navigationBar.shadowImage = nil
     navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+  }
 
+  // MARK: Functions
+  private func setupTableView() {
+    view.addSubview(feedTableView)
+    feedTableView.snp.makeConstraints { (make) in
+      make.edges.equalToSuperview()
+    }
+    feedTableView.rowHeight = 90
+    feedTableView.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
+    setupTableViewBindings()
+  }
+
+  @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+    // TODO: Fix
+    //    viewModel.moveToFirstPage()
+  }
+
+  private func setupTableViewBindings() {
+    viewModel.articlesDriver
+      .drive(feedTableView.rx.items) { tableView, row, model in
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewCell") as! ArticlePreviewCell
+        cell.configureWith(model)
+        return cell
+      }.disposed(by: disposeBag)
+
+    feedTableView.rx
+      .modelSelected(ArticlePreview.self)
+      .subscribe(viewModel.articleSelectedSubject)
+      .disposed(by: disposeBag)
+
+    feedTableView.rx.willDisplayCell
+      .subscribe(onNext: { [unowned self] (cellIndexPathPair) in
+        if cellIndexPathPair.indexPath.row >= (self.feedTableView.numberOfRows(inSection: 0) - 3) {
+          self.viewModel.moveToNextPageIfNeededSubject.onNext(())
+        }
+      }).disposed(by: disposeBag)
   }
 }

@@ -14,6 +14,7 @@ target 'newsapp' do
   pod 'TwitterKit'
   
   pod 'RxSwift'
+  pod 'RxDataSources'
   pod 'RxCocoa'
 
   pod 'SnapKit'
