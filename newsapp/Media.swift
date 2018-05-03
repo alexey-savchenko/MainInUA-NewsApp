@@ -73,7 +73,7 @@ struct InstagramMedia: Media {
 
 class MediaFactory {
   class func makeMediaFromJSON(_ json: JSON) -> Media? {
-
+    
     if let mediaType = MediaType(rawValue: json["type"].string!) {
 
       switch mediaType {

@@ -9,14 +9,6 @@
 import Foundation
 
 struct NewsCategory {
-
   var name: String
   var rawName: String
-//
-//  static func categoryForString(string: String) -> NewsCategory? {
-//
-//
-//
-//  }
-  
 }

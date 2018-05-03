@@ -10,16 +10,13 @@ import Foundation
 import SwiftyJSON
 
 protocol Post {
-
   var id: Int { get set }
   var timestamp: String { get set }
   var title: String  { get set }
   var coverImageURL: URL { get set }
-
 }
 
 struct Article: Post {
-
   var coverImageURL: URL
   var title: String
   var timestamp: String
@@ -29,11 +26,9 @@ struct Article: Post {
   var tagArray: [String]
   var copyrightImage: String
   var categories: [NewsCategory]
-
 }
 
 struct ArticlePreview: Post {
-
   var coverImageURL: URL
   var title: String
   var timestamp: String
@@ -41,7 +36,6 @@ struct ArticlePreview: Post {
   var isHot: Bool
   var isRead: Bool
   var category: NewsCategory
-  
 }
 
 extension ArticlePreview {

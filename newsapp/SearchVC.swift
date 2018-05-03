@@ -11,6 +11,10 @@ import RxCocoa
 import RxSwift
 
 class SearchVC: UIViewController {
+
+  deinit {
+    print("\(self) dealloc")
+  }
   
   var feedTV: UITableView!
   var articleArray = [ArticlePreview]()
@@ -37,16 +41,16 @@ class SearchVC: UIViewController {
     
     view.addSubview(feedTV)
     
-//    self.navigationItem.searchController = searchController
+    //    self.navigationItem.searchController = searchController
     feedTV.tableHeaderView = searchController.searchBar
     view.backgroundColor = .white
-  
+
     activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: activityIndicator)]
 
     searchController.hidesNavigationBarDuringPresentation = false
     searchController.searchBar.barTintColor = UIColor(hexString: "EBEBEB")
-//    navigationItem.hidesSearchBarWhenScrolling = false
+    //    navigationItem.hidesSearchBarWhenScrolling = false
     searchController.dimsBackgroundDuringPresentation = false
     
     
@@ -55,7 +59,7 @@ class SearchVC: UIViewController {
     setupConstraints()
     
     viewModel = SearchNewsViewModel(searchService: NewsSearchService(query: searchController.searchBar.rx.text.orEmpty.asDriver()))
-  
+
     viewModel.querying.asObservable().subscribe { [unowned self] (event) in
       switch event {
       case .next(let value):
@@ -63,20 +67,20 @@ class SearchVC: UIViewController {
       default:
         break
       }
-    }.disposed(by: disposeBag)
+      }.disposed(by: disposeBag)
 
     viewModel.searchResultsDriver.asObservable().bind(to: feedTV.rx.items(cellIdentifier: "ArticlePreviewCell", cellType: ArticlePreviewCell.self)) { row, article, cell in
       cell.configureWith(article)
-    }.disposed(by: disposeBag)
+      }.disposed(by: disposeBag)
     
-    feedTV.rx.modelSelected(ArticlePreview.self).subscribe(onNext: { [unowned self] (article) in
-      print("Selected - \(article.title)")
-      self.feedTV.deselectRow(at: self.feedTV.indexPathForSelectedRow!, animated: true)
-      self.searchController.dismiss(animated: true, completion: nil)
-      let vc = ArticleTVC.instantiateWithAricleID(article.id)
-      self.navigationController?.pushViewController(vc, animated: true)
-      
-    }, onError: nil, onCompleted: nil, onDisposed: nil).disposed(by: disposeBag)
+    feedTV.rx.modelSelected(ArticlePreview.self)
+      .subscribe(onNext: { [unowned self] (article) in
+        print("Selected - \(article.title)")
+        self.feedTV.deselectRow(at: self.feedTV.indexPathForSelectedRow!, animated: true)
+        self.searchController.dismiss(animated: true, completion: nil)
+        let vc = ArticleTVC.instantiateWithAricleID(article.id)
+        self.navigationController?.pushViewController(vc, animated: true)
+      }).disposed(by: disposeBag)
     
   }
   
@@ -97,16 +101,13 @@ class SearchVC: UIViewController {
                                    feedTV.trailingAnchor.constraint(equalTo: view.trailingAnchor)])
 
     }
-    
-
-    
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    
     navigationController?.navigationBar.tintColor = UIColor.black
   }
+
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
     searchController.dismiss(animated: true, completion: nil)
@@ -114,21 +115,7 @@ class SearchVC: UIViewController {
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    
     navigationController?.navigationBar.shadowImage = nil
     navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-    
   }
-  
-  deinit {
-    print("\(self) dealloc")
-  }
-  
 }
-
-//extension SearchVC: UISearchResultsUpdating {
-//  func updateSearchResults(for searchController: UISearchController) {
-//
-//  }
-//}
-

@@ -10,14 +10,22 @@ import UIKit
 import AVKit
 import MobileCoreServices
 
-class ArticleTVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
-  
-  static func instantiateWithAricleID(_ id: Int) -> ArticleTVC {
-    let vc = ArticleTVC()
-    vc.articleID = id
-    return vc
+final class ArticleTVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+
+  init(_ vm: SingleArticleViewModelType) {
+    viewModel = vm
+    super.init(nibName: nil, bundle: nil)
   }
-  
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  deinit {
+    print("\(self) dealloc")
+  }
+
+  private let viewModel: SingleArticleViewModelType
   private var articleID: Int!
   
   var shareBarItem: UIBarButtonItem!
@@ -349,9 +357,5 @@ class ArticleTVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
       navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
       navigationController?.navigationBar.tintColor = UIColor.white
     }
-  }
-
-  deinit {
-    print("\(self) dealloc")
   }
 }

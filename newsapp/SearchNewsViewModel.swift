@@ -43,6 +43,4 @@ class SearchNewsViewModel {
   deinit {
     print("\(self) dealloc")
   }
-  
 }
-
