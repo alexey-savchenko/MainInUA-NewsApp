@@ -81,7 +81,7 @@ class Networking {
     
   }
   
-  static func getSingleArticle(with id: Int, completion: @escaping ((Status, Article?)->())){
+  static func getSingleArticle(with id: Int, completion: @escaping ((Status, Article?)->())) {
     
     Alamofire.request("https://main.in.ua/wp-json/nakitel/post/\(id)",
       method: .get,

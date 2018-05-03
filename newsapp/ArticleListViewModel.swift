@@ -20,6 +20,7 @@ protocol ArticleListViewModelType {
 }
 
 typealias ArticleAndCategorySelectionDelegate = ArticleSelectionDelegate & CategorySelectionDelegate
+typealias TagAndCategorySelectionDelegate = TagSelectionDelegate & CategorySelectionDelegate
 
 class ArticleListViewModel: ArticleListViewModelType {
 
@@ -103,7 +104,7 @@ class ArticleListViewModel: ArticleListViewModelType {
 
   private func moveToNextPageIfNeeded() {
     guard currentPage < totalAvailablePages && !isLoading else { return }
-    
+
     currentPage += 1
     isLoading = true
     service
