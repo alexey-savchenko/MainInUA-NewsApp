@@ -94,22 +94,12 @@ final class FeedVC: UIViewController {
   
   @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
     // TODO: Fix
-    //    viewModel.moveToFirstPage()
+    // viewModel.moveToFirstPage()
   }
   
   var menuLeadingConstraint: NSLayoutConstraint!
 
   // MARK: Lifecycle
-  fileprivate func setupMenuTableView() {
-    menuBackgroundView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-    menuBackgroundView.alpha = 0
-    menuBackgroundView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toggleMenu)))
-
-    menuTableView.dataSource = self
-    menuTableView.delegate = self
-    menuTableView.tableFooterView = UIView(frame: .zero)
-  }
-
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -149,11 +139,20 @@ final class FeedVC: UIViewController {
     navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
   }
 
+  fileprivate func setupMenuTableView() {
+    menuBackgroundView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+    menuBackgroundView.alpha = 0
+    menuBackgroundView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toggleMenu)))
+
+    menuTableView.dataSource = self
+    menuTableView.delegate = self
+    menuTableView.tableFooterView = UIView(frame: .zero)
+  }
+
   private func setupFeedTableView() {
     feedTableView.refreshControl = _refreshControl
     feedTableView.register(UINib(nibName: "ArticlePreviewDummyCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewDummyCell")
     feedTableView.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
-    feedTableView.separatorStyle = .none
     feedTableView.tableFooterView = UIView(frame: .zero)
     feedTableView.rowHeight = 90
     view.addSubview(feedTableView)
@@ -164,11 +163,17 @@ final class FeedVC: UIViewController {
   }
 
   private func setupFeedTableViewBindings() {
-    viewModel.articlesDriver.drive(feedTableView.rx.items) { tableView, row, model in
-      let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewCell") as! ArticlePreviewCell
-      cell.configureWith(model)
-      return cell
+    viewModel.articlesDriver
+      .drive(feedTableView.rx.items) { tableView, row, model in
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewCell") as! ArticlePreviewCell
+        cell.configureWith(model)
+        return cell
       }.disposed(by: disposeBag)
+
+    feedTableView.rx
+      .modelSelected(ArticlePreview.self)
+      .subscribe(viewModel.articleSelectedSubject)
+      .disposed(by: disposeBag)
   }
 
   @objc func searchTapped() {

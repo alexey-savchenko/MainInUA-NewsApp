@@ -15,15 +15,18 @@ protocol ArticleListViewModelType {
   var articlesDriver: Driver<[ArticlePreview]> { get }
   // Input
   var articleSelectedSubject: PublishSubject<ArticlePreview> { get }
+  var categorySelectedSubject: PublishSubject<NewsCategory> { get }
   var moveToNextPageIfNeededSubject: PublishSubject<Void> { get }
 }
+
+typealias ArticleAndCategorySelectionDelegate = ArticleSelectionDelegate & CategorySelectionDelegate
 
 class ArticleListViewModel: ArticleListViewModelType {
 
   // MARK: Init and deinit
   init(with loadService: ContentLoaderService,
        contentBuilder: NewsContentBuider,
-       delegate: ArticleSelectionDelegate) {
+       delegate: ArticleAndCategorySelectionDelegate) {
 
     self.contentBuilder = contentBuilder
     self.service = loadService
@@ -47,6 +50,10 @@ class ArticleListViewModel: ArticleListViewModelType {
       .do(onNext: markAsReadArticle)
       .subscribe(onNext: delegate.articleSelected)
       .disposed(by: disposeBag)
+
+    categorySelectedSubject
+      .subscribe(onNext: delegate.categorySelected)
+      .disposed(by: disposeBag)
   }
 
   deinit {
@@ -67,6 +74,7 @@ class ArticleListViewModel: ArticleListViewModelType {
     return articlesSubject.asDriver(onErrorJustReturn: [])
   }
 
+  var categorySelectedSubject = PublishSubject<NewsCategory>()
   var articleSelectedSubject = PublishSubject<ArticlePreview>()
   var moveToNextPageIfNeededSubject = PublishSubject<Void>()
 
