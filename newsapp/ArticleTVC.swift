@@ -13,11 +13,9 @@ import MobileCoreServices
 class ArticleTVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
   
   static func instantiateWithAricleID(_ id: Int) -> ArticleTVC {
-    
     let vc = ArticleTVC()
     vc.articleID = id
     return vc
-    
   }
   
   private var articleID: Int!

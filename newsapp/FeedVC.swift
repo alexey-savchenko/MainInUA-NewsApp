@@ -174,6 +174,13 @@ final class FeedVC: UIViewController {
       .modelSelected(ArticlePreview.self)
       .subscribe(viewModel.articleSelectedSubject)
       .disposed(by: disposeBag)
+
+    feedTableView.rx.willDisplayCell
+      .subscribe(onNext: { [unowned self] (cellIndexPathPair) in
+        if cellIndexPathPair.indexPath.row >= (self.feedTableView.numberOfRows(inSection: 0) - 3) {
+          self.viewModel.moveToNextPageIfNeededSubject.onNext(())
+        }
+      }).disposed(by: disposeBag)
   }
 
   @objc func searchTapped() {

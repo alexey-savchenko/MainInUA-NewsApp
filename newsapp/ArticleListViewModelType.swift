@@ -63,6 +63,7 @@ class ArticleListViewModel: ArticleListViewModelType {
   // MARK: Private properties
   private var currentPage = 1
   private var totalAvailablePages = 1
+  private var isLoading = false
 
   private let contentBuilder: NewsContentBuider
   private let service: ContentLoaderService
@@ -101,14 +102,16 @@ class ArticleListViewModel: ArticleListViewModelType {
   }
 
   private func moveToNextPageIfNeeded() {
-    guard currentPage < totalAvailablePages else { return }
+    guard currentPage < totalAvailablePages && !isLoading else { return }
+    
     currentPage += 1
-
+    isLoading = true
     service
       .load(contentBuilder.buildContentFor(currentPage))
       .subscribe(onNext: { [weak self] (package) in
         guard let `self` = self else { return }
         self.totalAvailablePages = package.totalAvailablePages
+        self.isLoading = false
         var items = (try? self.articlesSubject.value()) ?? []
         items.append(contentsOf: package.news)
         self.articlesSubject.onNext(items)
