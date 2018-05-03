@@ -18,9 +18,7 @@ protocol SearchService: class {
 }
 
 class NewsSearchService: SearchService {
-  
   var querying = Variable<Bool>(false)
-  
   let disposeBag = DisposeBag()
   
   init(query: Driver<String>) {
@@ -32,7 +30,6 @@ class NewsSearchService: SearchService {
       .drive(onNext: { [unowned self] (queryString) in
         self.querying.value = true
         self.searchNewsWithTitle(queryString)
-        
       }).disposed(by: disposeBag)
   }
   
@@ -41,9 +38,7 @@ class NewsSearchService: SearchService {
   private var request: DataRequest?
   
   private func searchNewsWithTitle(_ query: String) {
-    
     request?.cancel()
-    
     request = Alamofire.request("https://main.in.ua/wp-json/nakitel/search",
                                 method: .get,
                                 parameters: ["q": query,
@@ -54,7 +49,6 @@ class NewsSearchService: SearchService {
                                   self?.searchResponse.value = $0
                                   self?.querying.value = false
     }
-    
   }
   
   deinit {

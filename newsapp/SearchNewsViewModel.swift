@@ -12,7 +12,6 @@ import RxCocoa
 import SwiftyJSON
 
 class SearchNewsViewModel {
-  
   private let disposeBag = DisposeBag()
   
   var searchResultsDriver: SharedSequence<DriverSharingStrategy, [ArticlePreview]> {
@@ -22,31 +21,23 @@ class SearchNewsViewModel {
   var querying = Variable<Bool>(false)
   
   private var searchResults = Variable<[ArticlePreview]>([])
-  
-  private let searchService: SearchService
-  
+
   init(searchService: SearchService) {
-    
-    self.searchService = searchService
-    
-    self.searchService.querying.asObservable().subscribe { [unowned self] (event) in
-      
-      self.querying.value = event.element ?? false
-      
-    }.disposed(by: disposeBag)
-    
-    self.searchService.searchResponse.asObservable().subscribe { [unowned self] (event) in
-      
-      if let response = event.element,
-        let value = response?.value,
-        let json = JSON(value).array {
-        
-        self.searchResults.value = json.flatMap { ArticlePreview(json: $0) }
-        
-      }
-      
+    searchService.querying.asObservable()
+      .subscribe { [unowned self] (event) in
+        self.querying.value = event.element ?? false
       }.disposed(by: disposeBag)
     
+    searchService.searchResponse
+      .asObservable()
+      .subscribe({ [weak self] (event) in
+        if let dataResponse = event.element?.flatMap({ $0 }),
+          let value = dataResponse.value {
+          let json = JSON(value).arrayValue
+          self?.searchResults.value = json.compactMap(ArticlePreview.init)
+        }
+      })
+      .disposed(by: disposeBag)
   }
   
   deinit {

@@ -155,7 +155,7 @@ final class FeedVC: UIViewController {
     feedTableView.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
     feedTableView.separatorStyle = .none
     feedTableView.tableFooterView = UIView(frame: .zero)
-    feedTableView.rowHeight = 200
+    feedTableView.rowHeight = 90
     view.addSubview(feedTableView)
     feedTableView.snp.makeConstraints { (make) in
       make.edges.equalToSuperview()

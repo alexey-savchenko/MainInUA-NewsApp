@@ -38,13 +38,13 @@ enum NewsAPI: Resource {
     switch self {
       
     case .timeline(_):
-      return base.appending("/posts")
+      return "/posts"
     case let .singleArticle(ID):
-      return base.appending("/post/\(ID)")
+      return "/post/\(ID)"
     case .category(_):
-      return base.appending("/posts")
+      return "/posts"
     case .tagSearch(_, _):
-      return base.appending("/tag")
+      return "/tag"
     }
     
   }
