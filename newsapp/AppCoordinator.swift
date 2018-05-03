@@ -16,7 +16,6 @@ class AppCoordinator: Coordinator {
     window.makeKeyAndVisible()
   }
 
-//  private let window: UIWindow
   private let navigationController = UINavigationController()
   var rootViewController: UIViewController {
     return navigationController
@@ -25,16 +24,26 @@ class AppCoordinator: Coordinator {
 
   func start() {
     let viewModel = NewArticleListViewModel(with: NewWebContentLoader(),
-                                     contentBuilder: ContentBuilder(api: .timeline(page: 1)),
-                                     delegate: self)
+                                            contentBuilder: ContentBuilder(api: .timeline(page: 1)),
+                                            delegate: self)
     let rootArticleListController = FeedVC(viewModel)
     navigationController.setViewControllers([rootArticleListController], animated: false)
   }
 }
 
-extension AppCoordinator: ArticleSelectionDelegate {
+extension AppCoordinator: ArticleSelectionDelegate, TagSelectionDelegate, CategorySelectionDelegate {
+  func tagSelected(_ tag: String) {
+    print(tag)
+    // TODO: Implement
+  }
+
+  func categorySelected(_ category: NewsCategory) {
+    print(category)
+    // TODO: Implement
+  }
+
   func articleSelected(_ article: ArticlePreview) {
     print(article)
-    //TODO: Implement
+    // TODO: Implement
   }
 }

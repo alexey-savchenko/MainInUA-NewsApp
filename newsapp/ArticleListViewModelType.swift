@@ -34,10 +34,6 @@ protocol NewArticleListViewModelType {
   var moveToNextPageIfNeededSubject: PublishSubject<Void> { get }
 }
 
-protocol ArticleSelectionDelegate: class {
-  func articleSelected(_ article: ArticlePreview)
-}
-
 class NewArticleListViewModel: NewArticleListViewModelType {
 
   // MARK: Init and deinit

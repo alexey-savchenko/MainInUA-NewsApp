@@ -23,3 +23,15 @@ extension Coordinator {
     self.childCoordinators = self.childCoordinators.filter { $0 !== coordinator }
   }
 }
+
+protocol ArticleSelectionDelegate: class {
+  func articleSelected(_ article: ArticlePreview)
+}
+
+protocol CategorySelectionDelegate: class {
+  func categorySelected(_ category: NewsCategory)
+}
+
+protocol TagSelectionDelegate: class {
+  func tagSelected(_ tag: String)
+}
