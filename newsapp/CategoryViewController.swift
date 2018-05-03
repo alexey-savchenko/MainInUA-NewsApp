@@ -6,11 +6,11 @@
 //  Copyright © 2017 Alexey Savchenko. All rights reserved.
 //
 
+import RxSwift
 import UIKit
 
-class CategoryViewController: UIViewController, ArticleSelectable, ArticleListPresentable {
-
-  required init(viewModel: ArticleListViewModelType) {
+class CategoryViewController: UIViewController {
+  init(viewModel: NewArticleListViewModelType) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
@@ -18,12 +18,14 @@ class CategoryViewController: UIViewController, ArticleSelectable, ArticleListPr
   required init?(coder aDecoder: NSCoder) {
     fatalError()
   }
-  
-  var viewModel: ArticleListViewModelType
+  deinit {
+    print("\(self) dealloc")
+  }
 
+  let disposeBag = DisposeBag()
+  let viewModel: NewArticleListViewModelType
   var category: NewsCategory!
-
-  var feedTableView: UITableView!
+  let feedTableView = UITableView()
 
   lazy var _refreshControl: UIRefreshControl = {
     let refreshControl = UIRefreshControl()
@@ -34,7 +36,8 @@ class CategoryViewController: UIViewController, ArticleSelectable, ArticleListPr
   }()
 
   @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-    viewModel.moveToFirstPage()
+    // TODO: Fix
+//    viewModel.moveToFirstPage()
   }
 
   var activityIndicator: UIActivityIndicatorView!
@@ -43,30 +46,23 @@ class CategoryViewController: UIViewController, ArticleSelectable, ArticleListPr
     super.viewDidLoad()
 
     activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-    navigationItem.rightBarButtonItems = [UIBarButtonItem.init(customView: activityIndicator)]
+    navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: activityIndicator)]
     navigationItem.title = category.name
 
-    feedTableView = UITableView()
-    feedTableView.frame = view.frame
-    feedTableView.dataSource = self
-    feedTableView.delegate = self
     view.addSubview(feedTableView)
-    
+    feedTableView.snp.makeConstraints { (make) in
+      make.edges.equalToSuperview()
+    }
+
     feedTableView.rowHeight = 90
-    feedTableView.register(UINib(nibName: "ArticlePreviewDummyCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewDummyCell")
     feedTableView.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
 
-    viewModel.didLoadNews = { [unowned self] in
-      self.feedTableView.reloadData()
-      self._refreshControl.endRefreshing()
-    }
-    
-    viewModel.didFailLoading = { [unowned self] message in
-      self.present(UIAlertController.createWith(type: .error, message: message), animated: true, completion: nil)
-      self._refreshControl.endRefreshing()
-    }
-    
-    viewModel.loadArticles()
+    viewModel.articlesDriver
+      .drive(feedTableView.rx.items) { tableView, row, model in
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewCell") as! ArticlePreviewCell
+        cell.configureWith(model)
+        return cell
+      }.disposed(by: disposeBag)
     
   }
 
@@ -83,53 +79,4 @@ class CategoryViewController: UIViewController, ArticleSelectable, ArticleListPr
     navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
 
   }
-
-  deinit {
-    print("\(self) dealloc")
-  }
-
 }
-
-extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
-
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    if viewModel.numberOfArticles() == 0 {
-      return 10
-    } else {
-      return viewModel.numberOfArticles()
-    }
-  }
-
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-    if viewModel.numberOfArticles() == 0 {
-      let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewDummyCell") as! ArticlePreviewDummyCell
-      return cell
-    } else {
-      let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewCell", for: indexPath) as! ArticlePreviewCell
-      cell.selectionStyle = .none
-      cell.configureWith(viewModel.articleForItemAt(indexPath))
-      return cell
-    }
-  }
-
-  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    if indexPath.row == tableView.numberOfRows(inSection: 0) - 3 {
-      if viewModel.shouldMoveToNextPage {
-        viewModel.moveToNextPage()
-      }
-    }
-  }
-
-  func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-    guard (0..<viewModel.numberOfArticles()).contains(indexPath.row) else { return nil }
-    return indexPath
-  }
-  
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    articleSelectedWithID(viewModel.articleForItemAt(indexPath).id)
-  }
-
-}
-
-

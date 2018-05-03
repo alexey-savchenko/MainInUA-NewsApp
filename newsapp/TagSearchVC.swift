@@ -7,12 +7,11 @@
 //
 
 import UIKit
+import RxSwift
 
-class TagSearchVC: UIViewController, ArticleSelectable, ArticleListPresentable {
+class TagSearchVC: UIViewController {
 
-  var viewModel: ArticleListViewModelType
-
-  required init(viewModel: ArticleListViewModelType) {
+  required init(viewModel: NewArticleListViewModelType) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
@@ -21,68 +20,41 @@ class TagSearchVC: UIViewController, ArticleSelectable, ArticleListPresentable {
     fatalError("init(coder:) has not been implemented")
   }
 
-  
+  deinit {
+    print("\(self) dealloc")
+  }
+
+  let viewModel: NewArticleListViewModelType
+  let disposeBag = DisposeBag()
   var targetTag: String?
-//  var currentPage = 1
-//  var totalPages = 1
-//  var loadingInProgress = false
-  
-//  var articleArray = [ArticlePreview]() {
-//    didSet{
-//      print("searchResults count - \(articleArray.count)")
-//    }
-//  }
-
-//  var customBackButton: [UIBarButtonItem]!
-//  var activityIndicator: UIActivityIndicatorView!
-
-  var feedTableView: UITableView!
-//
-//  @objc func backPressed(){
-//    navigationController?.popViewController(animated: true)
-//  }
-
-
+  var feedTableView = UITableView()
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     navigationItem.title = targetTag ?? ""
 
-//    activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-//    navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: activityIndicator)]
-
-//    customBackButton = CustomBackButton.createWithText(text: "", color: .black, target: self, action: #selector(backPressed))
-//    navigationItem.leftBarButtonItems = customBackButton
-
     feedTableView = UITableView()
-    feedTableView.delegate = self
-    feedTableView.dataSource = self
-    feedTableView.translatesAutoresizingMaskIntoConstraints = false
     feedTableView.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
     feedTableView.tableFooterView = UIView(frame: .zero)
     feedTableView.rowHeight = 90
     view.addSubview(feedTableView)
 
-    setupConstraints()
+    viewModel.articlesDriver
+      .drive(feedTableView.rx.items) { tableView, row, model in
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewCell") as! ArticlePreviewCell
+        cell.configureWith(model)
+        return cell
+      }.disposed(by: disposeBag)
 
-    viewModel.didLoadNews = { [unowned self] in
-      self.feedTableView.reloadData()
-    }
-    
-    viewModel.didFailLoading = { [unowned self] message in
-      self.present(UIAlertController.createWith(type: .error, message: message), animated: true, completion: nil)
-    }
-    
-    viewModel.loadArticles()
+    setupConstraints()
   }
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
-    navigationController?.navigationBar.tintColor = UIColor.black
-    navigationController?.navigationBar.barTintColor = UIColor.white
-
+    navigationController?.navigationBar.tintColor = .black
+    navigationController?.navigationBar.barTintColor = .white
   }
 
   override func viewDidAppear(_ animated: Bool) {
@@ -90,64 +62,12 @@ class TagSearchVC: UIViewController, ArticleSelectable, ArticleListPresentable {
 
     navigationController?.navigationBar.shadowImage = nil
     navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-
   }
 
   func setupConstraints() {
-
-    if #available(iOS 11.0, *) {
-      let safeArea = view.safeAreaLayoutGuide
-      
-      NSLayoutConstraint.activate([feedTableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-                                   feedTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-                                   feedTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-                                   feedTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)])
-      
-    } else {
-      NSLayoutConstraint.activate([feedTableView.topAnchor.constraint(equalTo: topLayoutGuide.topAnchor),
-                                   feedTableView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor),
-                                   feedTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                                   feedTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)])
-      
-    }
-
-  }
-  
-  deinit {
-    print("\(self) dealloc")
-  }
-  
-}
-
-extension TagSearchVC: UITableViewDataSource, UITableViewDelegate {
-
-  func numberOfSections(in tableView: UITableView) -> Int {
-    return 1
-  }
-
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return viewModel.numberOfArticles()
-  }
-
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewCell", for: indexPath) as! ArticlePreviewCell
-
-    cell.selectionStyle = .none
-    cell.configureWith(viewModel.articleForItemAt(indexPath))
-
-    return cell
-  }
-
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    articleSelectedWithID(viewModel.articleForItemAt(indexPath).id)
-  }
-
-  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-
-    if indexPath.row == tableView.numberOfRows(inSection: 0) - 3 {
-      if viewModel.shouldMoveToNextPage {
-        viewModel.moveToNextPage()
-      }
+    feedTableView.snp.makeConstraints { (make) in
+      make.edges.equalToSuperview()
     }
   }
+
 }

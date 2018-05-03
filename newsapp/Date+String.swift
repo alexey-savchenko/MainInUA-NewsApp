@@ -13,7 +13,7 @@ extension Date {
     
     let dayTimePeriodFormatter = DateFormatter()
     dayTimePeriodFormatter.dateFormat = "dd.MM.YYYY HH:mm"
-    dayTimePeriodFormatter.timeZone = NSTimeZone(name: "UTC") as TimeZone!
+    dayTimePeriodFormatter.timeZone = TimeZone(identifier: "UTC")
     
     let dateString = dayTimePeriodFormatter.string(from: self)
     

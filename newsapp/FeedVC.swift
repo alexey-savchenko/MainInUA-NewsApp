@@ -7,58 +7,67 @@
 //
 
 import UIKit
+import SnapKit
+import RxCocoa
+import RxSwift
 
-class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
-  
-  required init(viewModel: ArticleListViewModelType) {
-    self.viewModel = viewModel
+final class FeedVC: UIViewController {
+
+  // Init and deinit
+  init(_ vm: NewArticleListViewModelType) {
+    viewModel = vm
     super.init(nibName: nil, bundle: nil)
   }
-  
+
   required init?(coder aDecoder: NSCoder) {
     fatalError()
   }
-  
-  var viewModel: ArticleListViewModelType
-  
-  var feedTableView: UITableView!
-  
-  let categories: [NewsCategory] = [NewsCategory(name: "В Україні", rawName: "in-ukraine"),
-                                    NewsCategory(name: "Економіка", rawName: "ekonomika"),
-                                    NewsCategory(name: "Культура", rawName: "kultura"),
-                                    NewsCategory(name: "Політика", rawName: "politika"),
-                                    NewsCategory(name: "Спорт", rawName: "sport"),
-                                    NewsCategory(name: "IT", rawName: "it"),
-                                    NewsCategory(name: "Суспільство", rawName: "suspilstvo"),
-                                    NewsCategory(name: "У світі", rawName: "u-sviti")]
+
+  deinit {
+    print("\(self) dealloc")
+  }
+
+  // MARK: Properties
+  private let disposeBag = DisposeBag()
+  private let viewModel: NewArticleListViewModelType
+  private let categories: [NewsCategory] = [NewsCategory(name: "В Україні", rawName: "in-ukraine"),
+                                            NewsCategory(name: "Економіка", rawName: "ekonomika"),
+                                            NewsCategory(name: "Культура", rawName: "kultura"),
+                                            NewsCategory(name: "Політика", rawName: "politika"),
+                                            NewsCategory(name: "Спорт", rawName: "sport"),
+                                            NewsCategory(name: "IT", rawName: "it"),
+                                            NewsCategory(name: "Суспільство", rawName: "suspilstvo"),
+                                            NewsCategory(name: "У світі", rawName: "u-sviti")]
   
   var animationInProgress = false
-  
-  let blackView = UIView() 
-  
   var menuIsShown = false
+
+  // MARK: UI
+  private let menuBackgroundView = UIView()
+  private let feedTableView = UITableView()
+  private let hamburgerItem = UIBarButtonItem(image: #imageLiteral(resourceName: "hamburgerImage"), style: .done, target: self, action: #selector(toggleMenu))
+  private let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+  private let menuTableView = UITableView()
+  private let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchTapped))
   
   
-  func toggleMenu() {
+  @objc func toggleMenu() {
     guard animationInProgress == false else {
       return
     }
     if menuIsShown {
-      
       animationInProgress = true
       self.menuLeadingConstraint.constant = -300
       self.hamburgerItem.image = UIImage(named: "hamburgerImage")
       UIView.animate(withDuration: 0.3, animations: {
         self.menuTableView.layoutIfNeeded()
-        self.blackView.alpha = 0
+        self.menuBackgroundView.alpha = 0
       }, completion: { (_) in
         self.animationInProgress = false
       })
       
       menuIsShown = false
-      
     } else {
-      
       animationInProgress = true
       
       self.menuLeadingConstraint.constant = 0
@@ -66,7 +75,7 @@ class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
       UIView.animate(withDuration: 0.3, animations: {
         
         self.menuTableView.layoutIfNeeded()
-        self.blackView.alpha = 1
+        self.menuBackgroundView.alpha = 1
         
       }, completion: { (_) in
         
@@ -76,122 +85,101 @@ class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
       menuIsShown = true
     }
   }
-  
-  @objc func hamburgerTap(){
-    toggleMenu()
-  }
-  
+
   lazy var _refreshControl: UIRefreshControl = {
     let refreshControl = UIRefreshControl()
     refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: UIControlEvents.valueChanged)
-    
     return refreshControl
-    
   }()
   
   @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-    viewModel.moveToFirstPage()
+    // TODO: Fix
+    //    viewModel.moveToFirstPage()
   }
   
   var menuLeadingConstraint: NSLayoutConstraint!
-  
-  @objc func blackViewTap(){
-    toggleMenu()
+
+  // MARK: Lifecycle
+  fileprivate func setupMenuTableView() {
+    menuBackgroundView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+    menuBackgroundView.alpha = 0
+    menuBackgroundView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toggleMenu)))
+
+    menuTableView.dataSource = self
+    menuTableView.delegate = self
+    menuTableView.tableFooterView = UIView(frame: .zero)
   }
-  
-  var hamburgerItem: UIBarButtonItem!
-  var activityIndicator: UIActivityIndicatorView!
-  var menuTableView: UITableView!
-  var searchButton: UIBarButtonItem!
-  
-  
-  @objc func searchTapped() {
-    navigationController?.pushViewController(SearchVC(), animated: true)
-  }
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
     
     view.backgroundColor = .white
-    
-    hamburgerItem = UIBarButtonItem(image: UIImage(named: "hamburgerImage"),
-                                    style: .done,
-                                    target: self,
-                                    action: #selector(hamburgerTap))
-    
     navigationItem.leftBarButtonItems = [hamburgerItem]
-    
-    self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
-    
-    activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-    searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchTapped))
-    navigationItem.rightBarButtonItems = [searchButton, UIBarButtonItem.init(customView: activityIndicator)]
-    
-    
-    blackView.translatesAutoresizingMaskIntoConstraints = false
-    blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-    blackView.alpha = 0
-    blackView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(blackViewTap)))
-    
-    feedTableView = UITableView()
-    feedTableView.dataSource = self
-    feedTableView.translatesAutoresizingMaskIntoConstraints = false
-    feedTableView.delegate = self
-    feedTableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    feedTableView.tableFooterView = UIView(frame: .zero)
-    
-    view.addSubview(feedTableView)
-    
-    menuTableView = UITableView()
-    menuTableView.translatesAutoresizingMaskIntoConstraints = false
-    menuTableView.dataSource = self
-    menuTableView.delegate = self
-    menuTableView.tableFooterView = UIView(frame: .zero)
-    
+    navigationController?.interactivePopGestureRecognizer?.delegate = nil
+
+    navigationItem.rightBarButtonItems = [searchButton, UIBarButtonItem(customView: activityIndicator)]
+
+    setupMenuTableView()
+    setupFeedTableView()
     
     view.addSubview(menuTableView)
     view.bringSubview(toFront: menuTableView)
-    view.insertSubview(blackView, belowSubview: menuTableView)
+    view.insertSubview(menuBackgroundView, belowSubview: menuTableView)
     
     setupConstraints()
-    
-    feedTableView.refreshControl = _refreshControl
-    feedTableView.register(UINib(nibName: "ArticlePreviewDummyCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewDummyCell")
-    feedTableView.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
-    feedTableView.register(UINib(nibName: "YearEventsCell", bundle: nil), forCellReuseIdentifier: "YearEventsCell")
-    
+
     self.navigationItem.titleView = {
-      let image : UIImage = UIImage(named: "logoSmall.png")!
+      let image: UIImage = #imageLiteral(resourceName: "logoSmall")
       let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
       imageView.contentMode = .scaleAspectFit
       imageView.image = image
       return imageView
     }()
-    
-    viewModel.didLoadNews = { [unowned self] in
-      self.feedTableView.reloadData()
-      self._refreshControl.endRefreshing()
+  }
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    navigationController?.navigationBar.tintColor = .black
+  }
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+
+    navigationController?.navigationBar.shadowImage = nil
+    navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+  }
+
+  private func setupFeedTableView() {
+    feedTableView.refreshControl = _refreshControl
+    feedTableView.register(UINib(nibName: "ArticlePreviewDummyCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewDummyCell")
+    feedTableView.register(UINib(nibName: "ArticlePreviewCell", bundle: nil), forCellReuseIdentifier: "ArticlePreviewCell")
+    feedTableView.separatorStyle = .none
+    feedTableView.tableFooterView = UIView(frame: .zero)
+    feedTableView.rowHeight = 200
+    view.addSubview(feedTableView)
+    feedTableView.snp.makeConstraints { (make) in
+      make.edges.equalToSuperview()
     }
-    
-    viewModel.didFailLoading = { [unowned self] message in
-      self.present(UIAlertController.createWith(type: .error, message: message), animated: true, completion: nil)
-      self._refreshControl.endRefreshing()
-    }
-    
-    viewModel.loadArticles()
-    
+    setupFeedTableViewBindings()
+  }
+
+  private func setupFeedTableViewBindings() {
+    viewModel.articlesDriver.drive(feedTableView.rx.items) { tableView, row, model in
+      let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewCell") as! ArticlePreviewCell
+      cell.configureWith(model)
+      return cell
+      }.disposed(by: disposeBag)
+  }
+
+  @objc func searchTapped() {
+    navigationController?.pushViewController(SearchVC(), animated: true)
   }
   
   func setupConstraints() {
     
     if #available(iOS 11.0, *) {
       let safeArea = view.safeAreaLayoutGuide
-      
-      feedTableView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 0).isActive = true
-      feedTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
-      feedTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
-      feedTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
-      
+
       menuTableView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 0).isActive = true
       menuTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
       menuTableView.widthAnchor.constraint(equalToConstant: 200).isActive = true
@@ -200,19 +188,15 @@ class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
       menuLeadingConstraint.constant = -300
       menuLeadingConstraint.isActive = true
       
-      blackView.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
-      blackView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
-      blackView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
-      blackView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
+      menuBackgroundView.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
+      menuBackgroundView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
+      menuBackgroundView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
+      menuBackgroundView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
       
     } else {
       // Fallback on earlier versions
       automaticallyAdjustsScrollViewInsets = false
-      feedTableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
-      feedTableView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor).isActive = true
-      feedTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-      feedTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-      
+
       menuTableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 0).isActive = true
       menuTableView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor).isActive = true
       menuTableView.widthAnchor.constraint(equalToConstant: 200).isActive = true
@@ -221,188 +205,54 @@ class FeedVC: UIViewController, ArticleSelectable, ArticleListPresentable {
       menuLeadingConstraint.constant = -300
       menuLeadingConstraint.isActive = true
       
-      blackView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
-      blackView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor).isActive = true
-      blackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-      blackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+      menuBackgroundView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
+      menuBackgroundView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor).isActive = true
+      menuBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+      menuBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
       
     }
-    
-
-    
   }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    navigationController?.navigationBar.tintColor = UIColor.black
-  }
-  
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    
-    navigationController?.navigationBar.shadowImage = nil
-    navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-    
-  }
-  
-  func yearEventSelected(){
-    
-    navigationController?.pushViewController(YearEventsVC(), animated: true)
-    
-  }
-  
-  
 }
 
 extension FeedVC: UITableViewDataSource, UITableViewDelegate {
-  
-  func numberOfSections(in tableView: UITableView) -> Int {
-    
-    if tableView == feedTableView {
-      return 2
-    } else {
-      return 1
-    }
-    
-  }
-  
+
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    if tableView == feedTableView {
-      if section == 0 {
-        //Extra section for Year event
-        return 1
-      } else {
-        if viewModel.numberOfArticles() == 0 {
-          return 10
-        } else {
-          return viewModel.numberOfArticles()
-        }
-      }
-    } else {
-      return categories.count + 1
-    }
+    return categories.count + 1
   }
-  
-  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    if tableView == feedTableView {
-      if indexPath.section == 0 {
-        return 200
-      } else {
-        return 90
-      }
-    } else {
-      return UITableViewAutomaticDimension
-    }
-  }
-  
+
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
-    if tableView == feedTableView {
-      
-      if indexPath.section == 0 {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "YearEventsCell", for: indexPath) as! YearEventsCell
-        cell.selectionStyle = .none
-        return cell
-        
-      } else {
-        
-        if viewModel.numberOfArticles() == 0 {
-          
-          let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewDummyCell") as! ArticlePreviewDummyCell
-          return cell
-          
-        } else {
-          
-          let cell = tableView.dequeueReusableCell(withIdentifier: "ArticlePreviewCell", for: indexPath) as! ArticlePreviewCell
-          cell.selectionStyle = .none
-          cell.configureWith(viewModel.articleForItemAt(indexPath))
-          return cell
-          
-        }
-     
-      }
-     
+
+    if indexPath.row == 0 {
+      let cell = UITableViewCell()
+      cell.textLabel?.text = "Розділи:"
+      cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+      cell.selectionStyle = .none
+      return cell
+
     } else {
-      
-      if indexPath.row == 0 {
-        
-        let cell = UITableViewCell()
-        
-        cell.textLabel?.text = "Розділи:"
-        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        cell.selectionStyle = .none
-        
-        return cell
-        
-      } else {
-        
-        let cell = UITableViewCell()
-        
-        cell.textLabel?.text = categories[indexPath.row - 1].name
-        
-        return cell
-        
-      }
-      
+      let cell = UITableViewCell()
+      cell.textLabel?.text = categories[indexPath.row - 1].name
+      return cell
     }
-    
   }
-  
-  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    
-    if tableView == feedTableView {
-      
-      guard indexPath.section == 1 else { return }
-      
-      if indexPath.row == tableView.numberOfRows(inSection: 1) - 3 {
-        if viewModel.shouldMoveToNextPage {
-          viewModel.moveToNextPage()
-        }
-      }
-      
-    }
-    
-  }
-  
-  func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-    guard (0..<viewModel.numberOfArticles()).contains(indexPath.row) else { return nil }
-    return indexPath
-  }
-  
+
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    
-    if tableView == feedTableView {
-      
-      if indexPath.section == 0 {
-        //Year event
-        yearEventSelected()
-      } else {
-        articleSelectedWithID(viewModel.articleForItemAt(indexPath).id)
-      }
-      
-    } else {
-      
+    if tableView == menuTableView {
       guard indexPath.row != 0 else { return }
-      
       tableView.deselectRow(at: indexPath, animated: true)
-      
       toggleMenu()
       
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-        let category = self.categories[indexPath.row - 1]
-        
-        let categoryVC = CategoryViewController(viewModel:
-          ArticleListViewModel(with: WebContentLoader(),
-                               contentBuilder: ContentBuilder(api: .category(category: category, page: 1))))
-        
-        categoryVC.category = category
-        self.navigationController?.pushViewController(categoryVC, animated: true)
-        
+        //TODO: Fix
+        //        let category = self.categories[indexPath.row - 1]
+        //        let categoryVC = CategoryViewController(viewModel:
+        //          NewArticleListViewModel(with: NewWebContentLoader(),
+        //                                  contentBuilder: ContentBuilder(api: .category(category: category, page: 1)),
+        //                                  delegate: <#ArticleSelectionDelegate#>))
+        //        categoryVC.category = category
+        //        self.navigationController?.pushViewController(categoryVC, animated: true)
+
       })
     }
-    
   }
-  
-  
 }

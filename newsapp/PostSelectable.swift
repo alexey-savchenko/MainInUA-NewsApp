@@ -9,13 +9,13 @@
 import Foundation
 import UIKit
 
-protocol ArticleSelectable {
-}
-
-extension ArticleSelectable where Self: ArticleListPresentable & UIViewController {
-  func articleSelectedWithID(_ id: Int) {
-    let articleVC = ArticleTVC.instantiateWithAricleID(id)
-    self.viewModel.markAsReadArticleWithID(id)
-    navigationController?.pushViewController(articleVC, animated: true)
-  }
-}
+//protocol ArticleSelectable {
+//}
+//
+//extension ArticleSelectable where Self: ArticleListPresentable & UIViewController {
+//  func articleSelectedWithID(_ id: Int) {
+//    let articleVC = ArticleTVC.instantiateWithAricleID(id)
+//    self.viewModel.markAsReadArticleWithID(id)
+//    navigationController?.pushViewController(articleVC, animated: true)
+//  }
+//}

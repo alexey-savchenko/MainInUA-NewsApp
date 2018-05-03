@@ -94,7 +94,7 @@ enum NewsAPI: Resource {
 
 struct WebContent<T> {
   let resource: Resource
-  let parse: (JSON) -> T
+  let parse: (DataResponse<Any>) -> T
 }
 
 //News package model

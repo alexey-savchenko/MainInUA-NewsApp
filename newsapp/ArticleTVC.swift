@@ -139,15 +139,16 @@ class ArticleTVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
   }
   
   @objc func catSelected(){
-    let category = article.categories.first!
-    
-    let categoryVC = CategoryViewController(viewModel:
-      ArticleListViewModel(with: WebContentLoader(),
-                           contentBuilder: ContentBuilder(api:
-                            .category(category: category, page: 1))))
-    
-    categoryVC.category = category
-    self.navigationController?.pushViewController(categoryVC, animated: true)
+    // TODO: Fix
+    //    let category = article.categories.first!
+    //
+    //    let categoryVC = CategoryViewController(viewModel:
+    //      NewArticleListViewModel(with: NewWebContentLoader(),
+    //                              contentBuilder: ContentBuilder(api: .category(category: category, page: 1)),
+    //                              delegate: <#ArticleSelectionDelegate#>))
+    //
+    //    categoryVC.category = category
+    //    self.navigationController?.pushViewController(categoryVC, animated: true)
   }
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -222,13 +223,15 @@ class ArticleTVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         cell.tags = article.tagArray
         cell.tagSelectionAction = { [unowned self] tag in
-          
-          let tagSearchVC = TagSearchVC(viewModel:
-            ArticleListViewModel(with: WebContentLoader(),
-                                 contentBuilder: ContentBuilder(api: NewsAPI.tagSearch(tag: tag, page: 1))))
-          tagSearchVC.targetTag = tag
-          self.navigationController?.pushViewController(tagSearchVC, animated: true)
-          
+
+          // TODO: Fix
+//          let tagSearchVC = TagSearchVC(viewModel:
+//            NewArticleListViewModel(with: NewWebContentLoader(),
+//                                    contentBuilder: ContentBuilder(api: NewsAPI.tagSearch(tag: tag, page: 1)),
+//                                    delegate: <#ArticleSelectionDelegate#>))
+//          tagSearchVC.targetTag = tag
+//          self.navigationController?.pushViewController(tagSearchVC, animated: true)
+
         }
         
         return cell
@@ -303,40 +306,27 @@ class ArticleTVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         default:
           return UITableViewCell()
         }
-        
       }
-      
     }
-    
   }
   
   func tableView(_ tableView: UITableView,
                  willDisplay cell: UITableViewCell,
                  forRowAt indexPath: IndexPath) {
-    
     if let _cell = cell as? ArticleVideoCell {
       _cell.webView.load(URLRequest(url: _cell.videoURL))
     }
-    
     if let _cell = cell as? SocialMediaCell {
-      
       let cellMedia = article.mediaArray[indexPath.section - 2]
-      
       if cellMedia.type == .twitter {
-        
         _cell.loadTwitterPost()
-        
       } else {
-        
         _cell.loadWebContent()
-        
       }
-      
     }
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    
     guard article != nil else {
       return 0
     }
@@ -346,33 +336,23 @@ class ArticleTVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     } else {
       return UITableViewAutomaticDimension
     }
-    
   }
   
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    
     let offset = scrollView.contentOffset.y
-    
     let threshold = UIScreen.main.bounds.width * 0.5625
     
     if offset > threshold {
-      
       navigationController?.navigationBar.shadowImage = nil
       navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
       navigationController?.navigationBar.tintColor = UIColor.black
-      
     } else {
-      
       navigationController?.navigationBar.shadowImage = UIImage()
       navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
       navigationController?.navigationBar.tintColor = UIColor.white
     }
-    
-    
   }
-  
-  
-  
+
   deinit {
     print("\(self) dealloc")
   }

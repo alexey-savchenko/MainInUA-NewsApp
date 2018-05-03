@@ -25,8 +25,8 @@ class NewWebContentLoader: ContentLoaderService {
         .request(content.resource)
         .responseJSON { dataResponse in
           switch dataResponse.result {
-          case .success(let value):
-            observer.onNext(content.parse(JSON(value)))
+          case .success:
+            observer.onNext(content.parse(dataResponse))
           case .failure(let error):
             observer.onError(error)
           }

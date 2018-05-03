@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class SearchVC: UIViewController, ArticleSelectable {
+class SearchVC: UIViewController {
   
   var feedTV: UITableView!
   var articleArray = [ArticlePreview]()
