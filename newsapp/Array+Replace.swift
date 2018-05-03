@@ -8,14 +8,9 @@
 
 import Foundation
 
-
-  extension Array {
-
-    mutating func replace(with item: Element, at position: Int){
-
-      remove(at: position)
-      insert(item, at: position)
-
-    }
+extension Array {
+  mutating func replace(with item: Element, at position: Int){
+    remove(at: position)
+    insert(item, at: position)
   }
-
+}

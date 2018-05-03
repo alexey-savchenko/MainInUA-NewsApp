@@ -49,7 +49,6 @@ class ArticleListViewModel: ArticleListViewModelType {
                                           switch requestResult {
                                             
                                           case let .success(newsPackage):
-                                            
                                             self?.news.append(contentsOf: newsPackage.news)
                                             self?.totalPages = newsPackage.totalAvailablePages
                                             self?.isLoading = false
@@ -59,7 +58,6 @@ class ArticleListViewModel: ArticleListViewModelType {
                                           }
                                           
     })
-    
   }
   
   func articleForItemAt(_ indexPath: IndexPath) -> ArticlePreview {
@@ -88,28 +86,19 @@ class ArticleListViewModel: ArticleListViewModelType {
     news = []
     loadArticles()
   }
-  
-  
+
   func markAsReadArticleWithID(_ ID: Int) {
-    
     let articleReadIDArray = UserDefaults.standard.readIDArray
-    
+
     if !articleReadIDArray.contains(ID) {
-      
       var newArticleReadIDArray = articleReadIDArray
-      
       newArticleReadIDArray.append(ID)
-      
       UserDefaults.standard.readIDArray = newArticleReadIDArray
-      
+
       if let targetArticleIndex = news.index(where: { $0.id == ID } ) {
-        
         var articlePreview = news[targetArticleIndex]
-        
         articlePreview.isRead = true
-        
         news.replace(with: articlePreview, at: targetArticleIndex)
-        
       }
     }
   }

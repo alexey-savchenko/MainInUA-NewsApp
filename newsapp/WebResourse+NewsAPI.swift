@@ -8,15 +8,22 @@
 
 import Foundation
 import Alamofire
+import SwiftyJSON
 
-protocol WebResource {
+protocol Resource: URLRequestConvertible {
   var parameters: [String: Any] { get }
   var queryURL: URL { get }
   var method: HTTPMethod { get }
 }
 
-enum NewsAPI: WebResource {
-  
+enum NewsAPI: Resource {
+  func asURLRequest() throws -> URLRequest {
+    let originalRequest = try URLRequest(url: base.appending(path),
+                                         method: method,
+                                         headers: nil)
+    let encodedRequest = try URLEncoding.default.encode(originalRequest, with: parameters)
+    return encodedRequest
+  }
   var base: String {
     return "https://main.in.ua/wp-json/nakitel"
   }
@@ -85,15 +92,9 @@ enum NewsAPI: WebResource {
   
 }
 
-enum Result<T> {
-  case success(T)
-  case failure(String?)
-}
-
-
 struct WebContent<T> {
-  let resource: WebResource
-  let parseFunction: (DataResponse<Any>) -> Result<T>
+  let resource: Resource
+  let parse: (JSON) -> T
 }
 
 //News package model
