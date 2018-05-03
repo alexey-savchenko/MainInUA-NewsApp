@@ -11,30 +11,14 @@ import RxSwift
 import RxCocoa
 
 protocol ArticleListViewModelType {
-  
-  init(with loadService: ContentLoaderService, contentBuilder: NewsContentBuider)
-  
-  var didLoadNews: (() -> ())? { get set }
-  var didFailLoading: ((String) -> ())? { get set }
-  
-  var shouldMoveToNextPage: Bool { get }
-  
-  func loadArticles()
-  func articleForItemAt(_ indexPath: IndexPath) -> ArticlePreview
-  func numberOfArticles() -> Int
-  func moveToNextPage()
-  func moveToFirstPage()
-  
-  func markAsReadArticleWithID(_ ID: Int)
-}
-
-protocol NewArticleListViewModelType {
+  // Output
   var articlesDriver: Driver<[ArticlePreview]> { get }
+  // Input
   var articleSelectedSubject: PublishSubject<ArticlePreview> { get }
   var moveToNextPageIfNeededSubject: PublishSubject<Void> { get }
 }
 
-class NewArticleListViewModel: NewArticleListViewModelType {
+class ArticleListViewModel: ArticleListViewModelType {
 
   // MARK: Init and deinit
   init(with loadService: ContentLoaderService,

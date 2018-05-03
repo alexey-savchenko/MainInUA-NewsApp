@@ -14,7 +14,7 @@ import RxSwift
 final class FeedVC: UIViewController {
 
   // Init and deinit
-  init(_ vm: NewArticleListViewModelType) {
+  init(_ vm: ArticleListViewModelType) {
     viewModel = vm
     super.init(nibName: nil, bundle: nil)
   }
@@ -29,7 +29,7 @@ final class FeedVC: UIViewController {
 
   // MARK: Properties
   private let disposeBag = DisposeBag()
-  private let viewModel: NewArticleListViewModelType
+  private let viewModel: ArticleListViewModelType
   private let categories: [NewsCategory] = [NewsCategory(name: "В Україні", rawName: "in-ukraine"),
                                             NewsCategory(name: "Економіка", rawName: "ekonomika"),
                                             NewsCategory(name: "Культура", rawName: "kultura"),

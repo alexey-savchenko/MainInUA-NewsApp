@@ -11,7 +11,7 @@ import RxSwift
 
 class TagSearchVC: UIViewController {
 
-  required init(viewModel: NewArticleListViewModelType) {
+  required init(viewModel: ArticleListViewModelType) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
@@ -24,7 +24,7 @@ class TagSearchVC: UIViewController {
     print("\(self) dealloc")
   }
 
-  let viewModel: NewArticleListViewModelType
+  let viewModel: ArticleListViewModelType
   let disposeBag = DisposeBag()
   var targetTag: String?
   var feedTableView = UITableView()

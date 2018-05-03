@@ -23,7 +23,7 @@ class AppCoordinator: Coordinator {
   var childCoordinators = [Coordinator]()
 
   func start() {
-    let viewModel = NewArticleListViewModel(with: NewWebContentLoader(),
+    let viewModel = ArticleListViewModel(with: NewWebContentLoader(),
                                             contentBuilder: ContentBuilder(api: .timeline(page: 1)),
                                             delegate: self)
     let rootArticleListController = FeedVC(viewModel)

@@ -10,7 +10,7 @@ import RxSwift
 import UIKit
 
 class CategoryViewController: UIViewController {
-  init(viewModel: NewArticleListViewModelType) {
+  init(viewModel: ArticleListViewModelType) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
@@ -23,7 +23,7 @@ class CategoryViewController: UIViewController {
   }
 
   let disposeBag = DisposeBag()
-  let viewModel: NewArticleListViewModelType
+  let viewModel: ArticleListViewModelType
   var category: NewsCategory!
   let feedTableView = UITableView()
 
