@@ -34,6 +34,7 @@ final class ArticleTVC: UIViewController, UITableViewDataSource, UITableViewDele
   var customBackButton: [UIBarButtonItem]!
   
   @objc func backPressed(){
+    
     navigationController?.popViewController(animated: true)
   }
   
@@ -178,12 +179,10 @@ final class ArticleTVC: UIViewController, UITableViewDataSource, UITableViewDele
   
   //MARK: UITableView datasource & delegate methods
   func numberOfSections(in tableView: UITableView) -> Int {
-    
     guard article != nil else {
       return 0
     }
     return article.mediaArray.count + 3
-    //    return article.mediaArray.count + 2
   }	
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
