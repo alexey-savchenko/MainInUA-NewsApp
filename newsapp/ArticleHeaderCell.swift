@@ -16,5 +16,9 @@ class ArticleHeaderCell: UITableViewCell {
   
   @IBOutlet weak var headerImage: UIImageView!
   @IBOutlet weak var copyrightLabel: UILabel!
-  
+//
+//  override func layoutSubviews() {
+//    super.layoutSubviews()
+//    bounds.size.height = UIScreen.main.bounds.width * 0.5625
+//  }
 }

@@ -26,7 +26,6 @@ class SingleArticleViewModel: SingleArticleViewModelType {
   // MARK: Init and deinit
   init(articleID: Int,
        loadService: ContentLoaderService,
-       contentBuilder: NewsContentBuider,
        delegate: TagAndCategorySelectionDelegate) {
 
     loadService
@@ -57,11 +56,15 @@ class SingleArticleViewModel: SingleArticleViewModelType {
   var sectionsDriver: Driver<[MultipleSectionModel]> {
     return sectionsSubject.asDriver(onErrorJustReturn: [])
   }
+
   var dataSource: RxTableViewSectionedReloadDataSource<MultipleSectionModel> {
+
     return RxTableViewSectionedReloadDataSource<MultipleSectionModel>(configureCell: { (dataSource, tableView, indexPath, _) in
+
       switch dataSource[indexPath] {
 
       case .headerImageSectionItem(let imgURL, let copyright):
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleHeaderCell") as! ArticleHeaderCell
         cell.headerImage.sd_setImage(with: imgURL, completed: { (image, _, _, _) in
           cell.headerImage.image = UIImage.imageWithGradient(img: image ?? UIImage())
@@ -163,6 +166,7 @@ class SingleArticleViewModel: SingleArticleViewModelType {
 
       sectionsArray.append(.tagsSection(tags: .tagsSectionItem(tags: article.tagArray)))
 
+      observer.onNext(sectionsArray)
       return Disposables.create()
     }
   }
