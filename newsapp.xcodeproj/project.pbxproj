@@ -61,7 +61,6 @@
 		02FD321B1F41D3F5007A8671 /* ArticlePreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FD32191F41D3F5007A8671 /* ArticlePreviewCell.swift */; };
 		02FD321C1F41D3F5007A8671 /* ArticlePreviewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02FD321A1F41D3F5007A8671 /* ArticlePreviewCell.xib */; };
 		02FD321F1F41DF48007A8671 /* ArticleHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FD321D1F41DF48007A8671 /* ArticleHeaderCell.swift */; };
-		02FD32201F41DF48007A8671 /* ArticleHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02FD321E1F41DF48007A8671 /* ArticleHeaderCell.xib */; };
 		02FD32261F41EF0A007A8671 /* UIColor+HEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FD32251F41EF0A007A8671 /* UIColor+HEX.swift */; };
 		50C06DF87B27E5B93B747FD7 /* Pods_newsappUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB47565314F4E300B9D7BC10 /* Pods_newsappUITests.framework */; };
 		7EFBA64614FE67258E98DFB6 /* Pods_newsappTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D65FFB9F4C7889108BC3F85 /* Pods_newsappTests.framework */; };
@@ -126,7 +125,6 @@
 		E69D8FC31FFCC85F00E5E0C5 /* ArticlePreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FD32191F41D3F5007A8671 /* ArticlePreviewCell.swift */; };
 		E69D8FC41FFCC85F00E5E0C5 /* ArticlePreviewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02FD321A1F41D3F5007A8671 /* ArticlePreviewCell.xib */; };
 		E69D8FD91FFCC86400E5E0C5 /* ArticleHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FD321D1F41DF48007A8671 /* ArticleHeaderCell.swift */; };
-		E69D8FDA1FFCC86400E5E0C5 /* ArticleHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02FD321E1F41DF48007A8671 /* ArticleHeaderCell.xib */; };
 		E69D8FDB1FFCC86400E5E0C5 /* ArticleTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 025A96C51F755598005D91DE /* ArticleTitleCell.swift */; };
 		E69D8FDC1FFCC86400E5E0C5 /* ArticleTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 025A96C61F755598005D91DE /* ArticleTitleCell.xib */; };
 		E69D8FDD1FFCC86400E5E0C5 /* ArticleParagraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 025A96C91F75579D005D91DE /* ArticleParagraphCell.swift */; };
@@ -227,7 +225,6 @@
 		02FD32191F41D3F5007A8671 /* ArticlePreviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticlePreviewCell.swift; sourceTree = "<group>"; };
 		02FD321A1F41D3F5007A8671 /* ArticlePreviewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ArticlePreviewCell.xib; sourceTree = "<group>"; };
 		02FD321D1F41DF48007A8671 /* ArticleHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleHeaderCell.swift; sourceTree = "<group>"; };
-		02FD321E1F41DF48007A8671 /* ArticleHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ArticleHeaderCell.xib; sourceTree = "<group>"; };
 		02FD32251F41EF0A007A8671 /* UIColor+HEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+HEX.swift"; sourceTree = "<group>"; };
 		26D6C218D6C6BB1F904C0C55 /* Pods-newsappUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-newsappUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-newsappUITests/Pods-newsappUITests.release.xcconfig"; sourceTree = "<group>"; };
 		4F7C3FAB42608A9B7663D804 /* Pods_newsapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_newsapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -363,7 +360,6 @@
 			isa = PBXGroup;
 			children = (
 				02FD321D1F41DF48007A8671 /* ArticleHeaderCell.swift */,
-				02FD321E1F41DF48007A8671 /* ArticleHeaderCell.xib */,
 				025A96C51F755598005D91DE /* ArticleTitleCell.swift */,
 				025A96C61F755598005D91DE /* ArticleTitleCell.xib */,
 				025A96C91F75579D005D91DE /* ArticleParagraphCell.swift */,
@@ -693,7 +689,6 @@
 				E68F8D971FF3A6370013216F /* ArticleTagCollectionViewCell.xib in Resources */,
 				02FD321C1F41D3F5007A8671 /* ArticlePreviewCell.xib in Resources */,
 				025A96D01F755864005D91DE /* ArticleDescriptionCell.xib in Resources */,
-				02FD32201F41DF48007A8671 /* ArticleHeaderCell.xib in Resources */,
 				025A96D41F75587C005D91DE /* ArticleImageCell.xib in Resources */,
 				E636FD7D1FA739E600CC949E /* SocialMediaCell.xib in Resources */,
 				E6730A871FE91BCD00775D09 /* YearEventTextCell.xib in Resources */,
@@ -720,7 +715,6 @@
 				E69D8FDC1FFCC86400E5E0C5 /* ArticleTitleCell.xib in Resources */,
 				E69D8FDE1FFCC86400E5E0C5 /* ArticleParagraphCell.xib in Resources */,
 				E69D8FC21FFCC85F00E5E0C5 /* ArticlePreviewDummyCell.xib in Resources */,
-				E69D8FDA1FFCC86400E5E0C5 /* ArticleHeaderCell.xib in Resources */,
 				E69D8FE61FFCC86400E5E0C5 /* ArticleVideoCell.xib in Resources */,
 				E69D8FE81FFCC86400E5E0C5 /* SocialMediaCell.xib in Resources */,
 			);

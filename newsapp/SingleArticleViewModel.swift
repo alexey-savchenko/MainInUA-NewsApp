@@ -68,6 +68,7 @@ class SingleArticleViewModel: SingleArticleViewModelType {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleHeaderCell") as! ArticleHeaderCell
         cell.headerImage.sd_setImage(with: imgURL, completed: { (image, _, _, _) in
           cell.headerImage.image = UIImage.imageWithGradient(img: image ?? UIImage())
+          cell.setNeedsLayout()
         })
         cell.copyrightLabel.text = copyright
         return cell

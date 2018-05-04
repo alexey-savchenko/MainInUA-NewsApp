@@ -9,16 +9,29 @@
 import UIKit
 
 class ArticleHeaderCell: UITableViewCell {
-  
-  override func awakeFromNib() {
-    super.awakeFromNib()
+  let headerImage = UIImageView()
+  let copyrightLabel = UILabel()
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    guard contentView.subviews.isEmpty else {
+      return
+    }
+
+    contentView.addSubview(headerImage)
+    contentView.addSubview(copyrightLabel)
+
+    headerImage.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+      make.height.equalTo((UIScreen.main.bounds.width * 0.5625))
+    }
+
+    copyrightLabel.snp.makeConstraints { (make) in
+      make.trailing.equalToSuperview()
+      make.bottom.equalToSuperview()
+    }
+
+    copyrightLabel.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+
   }
-  
-  @IBOutlet weak var headerImage: UIImageView!
-  @IBOutlet weak var copyrightLabel: UILabel!
-//
-//  override func layoutSubviews() {
-//    super.layoutSubviews()
-//    bounds.size.height = UIScreen.main.bounds.width * 0.5625
-//  }
 }

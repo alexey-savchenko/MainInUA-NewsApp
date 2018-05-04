@@ -54,8 +54,9 @@ final class ArticleTVC: UIViewController, UITableViewDelegate {
     navigationItem.leftBarButtonItems = customBackButton
     tableView.rowHeight = UITableViewAutomaticDimension
     tableView.estimatedRowHeight = 100
-    
-    tableView.register(UINib(nibName: "ArticleHeaderCell", bundle: nil), forCellReuseIdentifier: "ArticleHeaderCell")
+
+    tableView.register(ArticleHeaderCell.self, forCellReuseIdentifier: "ArticleHeaderCell")
+//    tableView.register(UINib(nibName: "ArticleHeaderCell", bundle: nil), forCellReuseIdentifier: "ArticleHeaderCell")
     tableView.register(UINib(nibName: "ArticleDescriptionCell", bundle: nil), forCellReuseIdentifier: "ArticleDescriptionCell")
     tableView.register(UINib(nibName: "ArticleImageCell", bundle: nil), forCellReuseIdentifier: "ArticleImageCell")
     tableView.register(UINib(nibName: "ArticleParagraphCell", bundle: nil), forCellReuseIdentifier: "ArticleParagraphCell")
