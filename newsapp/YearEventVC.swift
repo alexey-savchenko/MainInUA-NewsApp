@@ -163,7 +163,6 @@ extension YearEventVC: UITableViewDataSource, UITableViewDelegate {
       case .category:
         return 70
       case .image:
-//        return UITableViewAutomaticDimension
         return UIScreen.main.bounds.width * 0.5 + 24
       case .text:
         return UITableViewAutomaticDimension
