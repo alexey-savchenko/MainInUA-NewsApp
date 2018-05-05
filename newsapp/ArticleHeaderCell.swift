@@ -25,13 +25,12 @@ class ArticleHeaderCell: UITableViewCell {
       make.edges.equalToSuperview()
       make.height.equalTo((UIScreen.main.bounds.width * 0.5625))
     }
-
+    headerImage.contentMode = .scaleAspectFill
     copyrightLabel.snp.makeConstraints { (make) in
       make.trailing.equalToSuperview()
       make.bottom.equalToSuperview()
     }
 
     copyrightLabel.backgroundColor = UIColor.white.withAlphaComponent(0.3)
-
   }
 }

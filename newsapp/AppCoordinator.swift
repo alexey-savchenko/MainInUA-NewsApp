@@ -47,7 +47,7 @@ extension AppCoordinator: ArticleSelectionDelegate, TagSelectionDelegate, Catego
     let vm = SingleArticleViewModel(articleID: article.id,
                                     loadService: NewWebContentLoader(),
                                     delegate: self)
-    let controller = ArticleTVC(vm)
+    let controller = ArticleController(vm)
     navigationController.pushViewController(controller, animated: true)
   }
 }

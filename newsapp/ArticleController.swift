@@ -11,7 +11,7 @@ import AVKit
 import RxSwift
 import MobileCoreServices
 
-final class ArticleTVC: UIViewController, UITableViewDelegate {
+final class ArticleController: UIViewController, UIScrollViewDelegate {
 
   // MARK: Init and deinit
   init(_ vm: SingleArticleViewModelType) {
@@ -46,17 +46,13 @@ final class ArticleTVC: UIViewController, UITableViewDelegate {
     
     view.backgroundColor = .white
 
-    view.addSubview(tableView)
     setupTableView()
     setupTableViewBindings()
     
     customBackButton = CustomBackButton.createWithText(text: "", color: .black, target: self, action: #selector(backPressed))
     navigationItem.leftBarButtonItems = customBackButton
-    tableView.rowHeight = UITableViewAutomaticDimension
-    tableView.estimatedRowHeight = 100
 
     tableView.register(ArticleHeaderCell.self, forCellReuseIdentifier: "ArticleHeaderCell")
-//    tableView.register(UINib(nibName: "ArticleHeaderCell", bundle: nil), forCellReuseIdentifier: "ArticleHeaderCell")
     tableView.register(UINib(nibName: "ArticleDescriptionCell", bundle: nil), forCellReuseIdentifier: "ArticleDescriptionCell")
     tableView.register(UINib(nibName: "ArticleImageCell", bundle: nil), forCellReuseIdentifier: "ArticleImageCell")
     tableView.register(UINib(nibName: "ArticleParagraphCell", bundle: nil), forCellReuseIdentifier: "ArticleParagraphCell")
@@ -96,10 +92,14 @@ final class ArticleTVC: UIViewController, UITableViewDelegate {
   }
 
   func setupTableView() {
+    view.addSubview(tableView)
     tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
     tableView.bounces = false
     tableView.allowsSelection = false
     tableView.separatorStyle = .none
+    tableView.rowHeight = UITableViewAutomaticDimension
+    tableView.estimatedRowHeight = 100
+
     if #available(iOS 11.0, *) {
       tableView.contentInsetAdjustmentBehavior = .never
     } else {
@@ -109,7 +109,7 @@ final class ArticleTVC: UIViewController, UITableViewDelegate {
     tableView.snp.makeConstraints { (make) in
       make.edges.equalToSuperview()
     }
-//    tableView.delegate = self
+    (tableView as UIScrollView).delegate = self
   }
 
   func setupTableViewBindings() {
@@ -118,7 +118,7 @@ final class ArticleTVC: UIViewController, UITableViewDelegate {
       .disposed(by: disposeBag)
   }
   
-  @objc func catSelected(){
+  @objc func catSelected() {
     // TODO: Fix
     //    let category = article.categories.first!
     //
@@ -147,19 +147,6 @@ final class ArticleTVC: UIViewController, UITableViewDelegate {
 //
 //    self.present(vc, animated: true, completion: nil)
   }
-
-//  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-////    if let cell = tableView.cellForRow(at: indexPath) as? ArticleHeaderCell {
-////      return UIScreen.main.bounds.width * 0.5625
-////    } else {
-////      return UITableViewAutomaticDimension
-////    }
-//    if indexPath.section == 0 {
-//      return UIScreen.main.bounds.width * 0.5625
-//    } else {
-//      return UITableViewAutomaticDimension
-//    }
-//  }
 
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     let offset = scrollView.contentOffset.y

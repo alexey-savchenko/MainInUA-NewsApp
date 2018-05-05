@@ -28,6 +28,8 @@ class SingleArticleViewModel: SingleArticleViewModelType {
        loadService: ContentLoaderService,
        delegate: TagAndCategorySelectionDelegate) {
 
+    unowned let _delegate = delegate
+    
     loadService
       .load(WebContent<Article?>(resource: NewsAPI.singleArticle(ID: articleID), parse: Article.init))
       .flatMap(transformArticleToSections)
@@ -39,7 +41,14 @@ class SingleArticleViewModel: SingleArticleViewModelType {
         let errorMessage = error.localizedDescription
         self.errorsOccuredSubject.onNext(errorMessage)
       }).disposed(by: disposeBag)
-
+    
+    tagSelectedSubject
+      .subscribe(onNext: _delegate.tagSelected)
+      .disposed(by: disposeBag)
+    
+    categorySelectedSubject
+      .subscribe(onNext: _delegate.categorySelected)
+      .disposed(by: disposeBag)
   }
 
   deinit {
