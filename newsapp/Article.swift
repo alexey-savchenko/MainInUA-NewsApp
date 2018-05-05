@@ -38,7 +38,7 @@ extension Article {
 
     let json = JSON(value)
 
-    let processedMedia = json["content"].arrayValue.compactMap(MediaFactory.makeMediaFromJSON)
+    let mediaArray = json["content"].arrayValue.compactMap(Media.init)
     let tags = json["tags"].arrayValue.compactMap { $0["name"].string }.map { "#\($0)" }
     let date = Date(timeIntervalSince1970: TimeInterval(json["created"].intValue))
     let categories = json["category"].arrayValue.map { NewsCategory(name: $0["name"].string!, rawName: $0["slug"].string!) }
@@ -48,7 +48,7 @@ extension Article {
     self.timestamp = date.toStringNotation()
     self.id = json["id"].int!
     self.webURL = URL(string: json["web_link"].stringValue)!
-    self.mediaArray = processedMedia
+    self.mediaArray = mediaArray
     self.tagArray = tags
     self.copyrightImage = json["thumbnail_url_medium"]["credits"].stringValue
     self.categories = categories

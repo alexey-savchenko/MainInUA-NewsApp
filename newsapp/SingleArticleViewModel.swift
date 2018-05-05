@@ -87,46 +87,46 @@ class SingleArticleViewModel: SingleArticleViewModelType {
 
         case .description:
           let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleDescriptionCell") as! ArticleDescriptionCell
-          cell.descriptionText.text = (media as! DescriptionMedia).content
+          cell.descriptionText.text = media.content
           return cell
 
         case .text:
           let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleParagraphCell") as! ArticleParagraphCell
-          cell.textParapraph.text = "    \((media as! TextMedia).content)"
+          cell.textParapraph.text = "    \(media.content)"
           return cell
 
         case .image:
           let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleImageCell") as! ArticleImageCell
-          cell.contentImage.sd_setImage(with: URL(string: (media as! ImageMedia).content)!, completed: nil)
+          cell.contentImage.sd_setImage(with: URL(string: media.content)!, completed: nil)
           return cell
 
         case .quote:
           let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleQuoteCell") as! ArticleQuoteCell
-          cell.quoteText.text = "    \((media as! QuoteMedia).content)"
+          cell.quoteText.text = "    \(media.content)"
           return cell
 
         case .video:
           let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleVideoCell") as! ArticleVideoCell
-          let videoURL = URL(string: (media as! VideoMedia).content)!
+          let videoURL = URL(string: media.content)!
           cell.videoURL = videoURL
           return cell
 
         case .twitter:
           let cell = tableView.dequeueReusableCell(withIdentifier: "SocialMediaCell") as! SocialMediaCell
-          let socialURL = URL(string: (media as! TwitterMedia).content)!
+          let socialURL = URL(string: media.content)!
           cell.socialURL = socialURL
           return cell
 
         case .facebook:
 
           let cell = tableView.dequeueReusableCell(withIdentifier: "SocialMediaCell") as! SocialMediaCell
-          let socialURL = URL(string: (media as! FacebookMedia).content)!
+          let socialURL = URL(string: media.content)!
           cell.socialURL = socialURL
           return cell
 
         case .instagram:
           let cell = tableView.dequeueReusableCell(withIdentifier: "SocialMediaCell") as! SocialMediaCell
-          let socialURL = URL(string: (media as! InstagramMedia).content)!
+          let socialURL = URL(string: media.content)!
           cell.socialURL = socialURL
           return cell
 
